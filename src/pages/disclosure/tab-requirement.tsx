@@ -6,8 +6,8 @@ import Splitter, { SplitDirection } from '@devbookhq/splitter';
 const { TextArea } = Input;
 import { createStyles } from 'antd-style';
 
-const id = 'gri_2_1';
-export const TabRequirement = () => {
+//const id = 'gri_2_1';
+export const TabRequirement = ({listRequirements}: {listRequirements: Array<any>}) => {
   const [requirements, setRequirements] = useState<CollapseProps['items']>([]);
 
   const useStyles = createStyles(({ token, css }) => ({
@@ -19,35 +19,36 @@ export const TabRequirement = () => {
   const { styles, cx, theme } = useStyles();
 
   useEffect(() => {
-    if (id) {
+    if(listRequirements){
       let req = [];
-      for (let i = 0; i < mainDisclosure[id].requirements.length; i++) {
-        let isi = localStorage.getItem(mainDisclosure[id].requirements[i].code);
-        if (!isi) {
-          isi = '';
-        }
+      for (let i = 0; i < listRequirements.length; i++) {
+        // let isi = localStorage.getItem(mainDisclosure[id].requirements[i].code);
+        // if (!isi) {
+        //   isi = '';
+        // }
+        let isi = '';
         req.push({
-          key: mainDisclosure[id].requirements[i].code,
-          label: mainDisclosure[id].requirements[i].code,
+          key: listRequirements[i].code,
+          label: listRequirements[i].code,
           children: (
             <div>
               <div style={{ fontWeight: 500, marginBottom: 10 }}>
-                {mainDisclosure[id].requirements[i].requirement}
+                {listRequirements[i].requirement}
               </div>
               <div style={{ marginBottom: 10 }}>
-                {mainDisclosure[id].requirements[i].guide}
+                {listRequirements[i].guide}
               </div>
               <TextArea
                 defaultValue={isi}
                 rows={6}
                 onChange={(e) => {
-                  //console.log(e.target.value)
-                  if (id) {
-                    localStorage.setItem(
-                      mainDisclosure[id].requirements[i].code,
-                      e.target.value
-                    );
-                  }
+                  console.log(e.target.value)
+                  // if (id) {
+                  //   localStorage.setItem(
+                  //     mainDisclosure[id].requirements[i].code,
+                  //     e.target.value
+                  //   );
+                  // }
                 }}
               />
             </div>
@@ -56,7 +57,44 @@ export const TabRequirement = () => {
       }
       setRequirements(req);
     }
-  }, []);
+    // if (id) {
+    //   let req = [];
+    //   for (let i = 0; i < mainDisclosure[id].requirements.length; i++) {
+    //     let isi = localStorage.getItem(mainDisclosure[id].requirements[i].code);
+    //     if (!isi) {
+    //       isi = '';
+    //     }
+    //     req.push({
+    //       key: mainDisclosure[id].requirements[i].code,
+    //       label: mainDisclosure[id].requirements[i].code,
+    //       children: (
+    //         <div>
+    //           <div style={{ fontWeight: 500, marginBottom: 10 }}>
+    //             {mainDisclosure[id].requirements[i].requirement}
+    //           </div>
+    //           <div style={{ marginBottom: 10 }}>
+    //             {mainDisclosure[id].requirements[i].guide}
+    //           </div>
+    //           <TextArea
+    //             defaultValue={isi}
+    //             rows={6}
+    //             onChange={(e) => {
+    //               //console.log(e.target.value)
+    //               if (id) {
+    //                 localStorage.setItem(
+    //                   mainDisclosure[id].requirements[i].code,
+    //                   e.target.value
+    //                 );
+    //               }
+    //             }}
+    //           />
+    //         </div>
+    //       ),
+    //     });
+    //   }
+    //   setRequirements(req);
+    // }
+  }, [listRequirements]);
 
   return (
     <div style={{ height: '80vh' }}>

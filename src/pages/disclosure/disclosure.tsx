@@ -1,5 +1,3 @@
-import type { ProColumns } from '@ant-design/pro-components';
-import { DragSortTable } from '@ant-design/pro-components';
 import { List, message, Tabs, Button } from 'antd';
 import { useEffect, useState } from 'react';
 import type { TabsProps } from 'antd';
@@ -10,7 +8,7 @@ import { Draggable } from './draggable';
 import { createStyles } from 'antd-style';
 import { Tiptap } from './tiptap';
 import Splitter, { SplitDirection } from '@devbookhq/splitter';
-import { mainDisclosure, IDisclosure } from './main-disclosure';
+import { IDisclosure } from './main-disclosure';
 import { marked } from 'marked';
 import { TabData } from './tab-data';
 import { TabRequirement } from './tab-requirement';
@@ -19,12 +17,9 @@ import { useQuery } from '@tanstack/react-query';
 
 import {
   CarryOutOutlined,
-  CheckOutlined,
-  FormOutlined,
 } from '@ant-design/icons';
-import { Select, Switch, Tree } from 'antd';
+import { Tree } from 'antd';
 import type { TreeDataNode } from 'antd';
-import { mdiCodeArray } from '@mdi/js';
 
 const useStyles = createStyles(({ token, css }) => ({
   flexRow: css`
@@ -47,16 +42,10 @@ export const DisclosurePage = () => {
   const [token, setToken] = useState(0);
   const [dataDisclosures, setDataDisclosures] = useState([]);
   const [treeData, setTreeData] = useState<TreeDataNode[]>([]);
+  const [listRequirements, setListRequirements] = useState([]);
 
-  // const handleDragSortEnd = (
-  //   beforeIndex: number,
-  //   afterIndex: number,
-  //   newDataSource: any
-  // ) => {
-  //   console.log('排序后的数据', newDataSource);
-  //   setDataSource(newDataSource);
-  //   message.success('修改列表排序成功');
-  // };
+  const [prompt, setPrompt] = useState('');
+  const [instruction, setInstruction] = useState('');
 
   const { data: dataSourceTree, refetch } = useQuery({
     queryKey: ['new-report-disclosures-tree'],
@@ -79,6 +68,25 @@ export const DisclosurePage = () => {
     }
   }, [dataSourceTopic]);
 
+  const getBahan = async (values: any) => {
+    let url = `/api/report/new-report/instructions`;
+    const rawResponse = await fetch(url, {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(values),
+    });
+    const jsonData = await rawResponse.json();
+    if (jsonData.success) {
+      console.log('jsonData ', jsonData)
+      setPrompt(jsonData.data.prompt)
+      setInstruction(jsonData.data.instruction)
+      setListRequirements(jsonData.data.requirements)
+    }
+  }
+
   const getDisclosureReport = async () => {
     const url = `/api/report/new-report/disclosures?reportId=${reportId}`;
     const response = await fetch(url);
@@ -87,13 +95,27 @@ export const DisclosurePage = () => {
       //window.location.reload();
       console.log('jsonData.data ', jsonData.data);
       setDataDisclosures(jsonData.data);
+
+      let req = [];
+      for(let i=0;i<jsonData.data.length;i++){
+        req.push({
+          "type": jsonData.data[i].type.toLowerCase(),
+          "lang": 'id', //jsonData.data.[i].lang,
+          "code": jsonData.data[i].type.toLowerCase()+'-'+jsonData.data[i].code,
+        })
+      }
+      getBahan(req);
+      console.log('request data ', req);
     }
   };
 
   const inserttDisclosureReport = async (
     id: string,
     name: string,
-    code: string
+    code: string,
+    type: string,
+    rname: string,
+    lang: string
   ) => {
     let values = {
       name: name,
@@ -101,6 +123,9 @@ export const DisclosurePage = () => {
       reportId: reportId,
       topicId: topicId,
       code: code,
+      type: type,
+      lang: lang,
+      rname: rname,
     };
     const url = `/api/report/new-report/disclosures/insert`;
     const rawResponse = await fetch(url, {
@@ -242,29 +267,33 @@ export const DisclosurePage = () => {
                 <div>
                   <Button
                     onClick={() => {
-                      let id = 'gri_2_3';
-                      let semuaisi = '';
-                      for (
-                        let i = 0;
-                        i < mainDisclosure[id as string].requirements.length;
-                        i++
-                      ) {
-                        let isi = localStorage.getItem(
-                          mainDisclosure[id as string].requirements[i].code
-                        );
-                        semuaisi += isi + '\n';
-                      }
-                      mainDisclosure[id as string].prompt += '\n' + semuaisi;
+                      // let id = 'gri_2_3';
+                      // let semuaisi = '';
+                      // for (
+                      //   let i = 0;
+                      //   i < mainDisclosure[id as string].requirements.length;
+                      //   i++
+                      // ) {
+                      //   let isi = localStorage.getItem(
+                      //     mainDisclosure[id as string].requirements[i].code
+                      //   );
+                      //   semuaisi += isi + '\n';
+                      // }
+                      // mainDisclosure[id as string].prompt += '\n' + semuaisi;
 
-                      let isiTambahan = localStorage.getItem(
-                        mainDisclosure[id as string].code + '-instrusi-tambahan'
-                      );
-                      if (isiTambahan) {
-                        mainDisclosure[id as string].prompt +=
-                          '\n' + isiTambahan;
-                      }
+                      // let isiTambahan = localStorage.getItem(
+                      //   mainDisclosure[id as string].code + '-instrusi-tambahan'
+                      // );
+                      // if (isiTambahan) {
+                      //   mainDisclosure[id as string].prompt +=
+                      //     '\n' + isiTambahan;
+                      // }
 
-                      onFinish(mainDisclosure[id as string]);
+                      //onFinish(mainDisclosure[id as string]);
+                      onFinish({
+                        instruction:instruction,
+                        prompt:prompt
+                      })
                     }}
                   >
                     Generate
@@ -332,7 +361,7 @@ export const DisclosurePage = () => {
     {
       key: '2',
       label: 'Requirement',
-      children: <TabRequirement />,
+      children: <TabRequirement listRequirements={listRequirements}/>,
     },
     {
       key: '3',
@@ -386,21 +415,27 @@ export const DisclosurePage = () => {
     let id;
     let name;
     let code;
+    let type;
+    let lang;
+    let rname;
     for (let i = 0; i < dataSourceTree.data.length; i++) {
       for (let x = 0; x < dataSourceTree.data[i].children.length; x++) {
         if (dataSourceTree.data[i].children[x]._id == active.id) {
           id = active.id;
           name = dataSourceTree.data[i].children[x].name;
           code = dataSourceTree.data[i].children[x].code;
+          type = dataSourceTree.data[i].children[x].type;
+          lang = dataSourceTree.data[i].children[x].lang;
+          rname = dataSourceTree.data[i].children[x].type+' '+dataSourceTree.data[i].children[x].code;
           console.log('handleDragEnd id ', active.id);
           console.log(
             'handleDragEnd name ',
-            dataSourceTree.data[i].children[x].name
+            dataSourceTree.data[i].children[x]
           );
         }
       }
     }
 
-    inserttDisclosureReport(id, name, code);
+    inserttDisclosureReport(id, name, code, type, rname, lang);
   }
 };

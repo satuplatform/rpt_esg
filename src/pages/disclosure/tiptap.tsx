@@ -53,18 +53,26 @@ const MenuBar = ({ editor }: { editor: any }) => {
           Code
         </Button>
 
-        <button onClick={() => editor.chain().focus().unsetAllMarks().run()}>
+        <Button
+          onClick={() => editor.chain().focus().unsetAllMarks().run()}
+          type={'dashed'}
+        >
           Clear marks
-        </button>
-        <button onClick={() => editor.chain().focus().clearNodes().run()}>
+        </Button>
+
+        <Button
+          onClick={() => editor.chain().focus().clearNodes().run()}
+          type={'dashed'}
+        >
           Clear nodes
-        </button>
-        <button
+        </Button>
+
+        <Button
           onClick={() => editor.chain().focus().setParagraph().run()}
-          className={editor.isActive('paragraph') ? 'is-active' : ''}
+          type={editor.isActive('paragraph') ? 'primary' : 'dashed'}
         >
           Paragraph
-        </button>
+        </Button>
 
         <Button
           onClick={() =>
@@ -134,48 +142,60 @@ const MenuBar = ({ editor }: { editor: any }) => {
           Ordered list
         </Button>
 
-        <button
+        <Button
           onClick={() => editor.chain().focus().toggleCodeBlock().run()}
-          className={editor.isActive('codeBlock') ? 'is-active' : ''}
+          type={editor.isActive('codeBlock') ? 'primary' : 'dashed'}
         >
           Code block
-        </button>
-        <button
+        </Button>
+
+        <Button
           onClick={() => editor.chain().focus().toggleBlockquote().run()}
-          className={editor.isActive('blockquote') ? 'is-active' : ''}
+          type={editor.isActive('blockquote') ? 'primary' : 'dashed'}
         >
           Blockquote
-        </button>
-        <button
+        </Button>
+
+        <Button
           onClick={() => editor.chain().focus().setHorizontalRule().run()}
+          type={'dashed'}
         >
           Horizontal rule
-        </button>
-        <button onClick={() => editor.chain().focus().setHardBreak().run()}>
-          Hard break
-        </button>
-        <button
+        </Button>
+
+        <Button
+          onClick={() => editor.chain().focus().setHardBreak().run()}
+          type={'dashed'}
+        >
+          Horizontal rule
+        </Button>
+
+        <Button
           onClick={() => editor.chain().focus().undo().run()}
           disabled={!editor.can().chain().focus().undo().run()}
+          type={'dashed'}
         >
           Undo
-        </button>
-        <button
+        </Button>
+
+        <Button
           onClick={() => editor.chain().focus().redo().run()}
           disabled={!editor.can().chain().focus().redo().run()}
+          type={'dashed'}
         >
           Redo
-        </button>
-        <button
+        </Button>
+
+        <Button
           onClick={() => editor.chain().focus().setColor('#958DF1').run()}
-          className={
-            editor.isActive('textStyle', { color: '#958DF1' })
-              ? 'is-active'
-              : ''
-          }
+          type={editor.isActive('textStyle', { color: '#958DF1' }) ? 'primary' : 'dashed'}
+          style={{backgroundColor: editor.isActive('textStyle', { color: '#958DF1' })
+          ? '#958DF1'
+          : 'white'}}
         >
           Purple
-        </button>
+        </Button>
+
       </div>
     </div>
   );

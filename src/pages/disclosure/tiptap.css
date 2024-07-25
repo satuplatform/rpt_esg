@@ -1,5 +1,7 @@
 .tiptap {
   padding: 10px;
+  height: 65vh;
+  overflow-y: scroll;
 }
 .tiptap strong {
   font-weight: 700;
