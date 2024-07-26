@@ -6,6 +6,7 @@ const useStyles = createStyles(({ token, css }) => ({
   button: {
     padding: '5px',
     border: '1px solid gray',
+    backgroundColor: 'white'
   },
 }));
 

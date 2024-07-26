@@ -8,14 +8,14 @@ interface IDroppable {
 }
 
 export const Droppable = ({ id, key, children }: IDroppable) => {
-  const { isOver, setNodeRef } = useDroppable({
+  const  { isOver, setNodeRef } = useDroppable({
     id: id,
   });
   const style = {
     backgroundColor: isOver ? '#F1F1F1' : '',
-    height: '60vh',
+    height: '60vh'
   };
-  console.log('over ', isOver);
+  //console.log('over ', over); 
 
   return (
     <div ref={setNodeRef} style={style}>

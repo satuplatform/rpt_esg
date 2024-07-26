@@ -1,4 +1,4 @@
-import { List, message, Tabs, Button } from 'antd';
+import { List, Popconfirm, message, Tabs, Button, Spin } from 'antd';
 import { useEffect, useState } from 'react';
 import type { TabsProps } from 'antd';
 import { DndContext } from '@dnd-kit/core';
@@ -14,7 +14,8 @@ import { TabData } from './tab-data';
 import { TabRequirement } from './tab-requirement';
 import { useParams } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
-
+import Icon from '@mdi/react';
+import { mdiDelete } from '@mdi/js';
 import {
   CarryOutOutlined,
 } from '@ant-design/icons';
@@ -27,7 +28,7 @@ const useStyles = createStyles(({ token, css }) => ({
     flexdirection: row;
   `,
   box: css`
-    padding: 10px;
+    padding: 0px;
   `,
   gutter: css`
     background: #dfd3c3;
@@ -88,7 +89,7 @@ export const DisclosurePage = () => {
   }
 
   const getDisclosureReport = async () => {
-    const url = `/api/report/new-report/disclosures?reportId=${reportId}`;
+    const url = `/api/report/new-report/disclosures?topicId=${topicId}&reportId=${reportId}`;
     const response = await fetch(url);
     const jsonData = await response.json();
     if (jsonData.success) {
@@ -231,6 +232,17 @@ export const DisclosurePage = () => {
     setSpinning(false);
   };
 
+  const onConfirmDiscDelete = async (dt) => {
+    console.log(dt)
+    const url = `/api/report/new-report/disclosures/delete?${dt._id}`;
+    const rawResponse = await fetch(url);
+    const jsonData = await rawResponse.json();
+    if (jsonData.success) {
+      message.success('Delete Sukses');
+      getDisclosureReport();
+    }
+  }
+
   const items: TabsProps['items'] = [
     {
       key: '1',
@@ -267,29 +279,6 @@ export const DisclosurePage = () => {
                 <div>
                   <Button
                     onClick={() => {
-                      // let id = 'gri_2_3';
-                      // let semuaisi = '';
-                      // for (
-                      //   let i = 0;
-                      //   i < mainDisclosure[id as string].requirements.length;
-                      //   i++
-                      // ) {
-                      //   let isi = localStorage.getItem(
-                      //     mainDisclosure[id as string].requirements[i].code
-                      //   );
-                      //   semuaisi += isi + '\n';
-                      // }
-                      // mainDisclosure[id as string].prompt += '\n' + semuaisi;
-
-                      // let isiTambahan = localStorage.getItem(
-                      //   mainDisclosure[id as string].code + '-instrusi-tambahan'
-                      // );
-                      // if (isiTambahan) {
-                      //   mainDisclosure[id as string].prompt +=
-                      //     '\n' + isiTambahan;
-                      // }
-
-                      //onFinish(mainDisclosure[id as string]);
                       onFinish({
                         instruction:instruction,
                         prompt:prompt
@@ -319,6 +308,7 @@ export const DisclosurePage = () => {
                   className={cx(styles.box)}
                 >
                   <Tree
+                    style={{overflowX: 'clip', height: '62vh', overflowY: 'scroll'}}
                     showLine={{ showLeafIcon: true }}
                     showIcon={false}
                     defaultExpandedKeys={['0-0-0']}
@@ -339,12 +329,17 @@ export const DisclosurePage = () => {
                     <List
                       key="_id"
                       size="small"
+                      style={{padding: 0, overflowY: 'auto', height: '60vh'}}
                       header={<div>List Disclosure</div>}
                       bordered
                       dataSource={dataDisclosures}
                       renderItem={(item) => (
                         <List.Item
-                          actions={[<a key="list-loadmore-edit">delete</a>]}
+                          actions={[
+                            <a onClick={() => onConfirmDiscDelete(item)} key="list-loadmore-edit">
+                              <Icon style={{color: 'red'}} path={mdiDelete} size={0.8} />
+                            </a>
+                        ]}
                         >
                           {item.code + ' ' + item.name}
                         </List.Item>
@@ -374,6 +369,7 @@ export const DisclosurePage = () => {
 
   return (
     <div>
+      <Spin spinning={spinning} fullscreen />
       <div style={{ marginBottom: '4px' }}>topik : {topic}</div>
       <Splitter
         gutterClassName={cx(styles.gutter)}
@@ -410,8 +406,18 @@ export const DisclosurePage = () => {
   );
 
   function handleDragEnd(event) {
-    const { active } = event;
+    const { active, over } = event;
+    
+    if(over == null){
+      return;
+    }
 
+    let idx = dataDisclosures.findIndex(d => d.disclosureId == active.id)
+    if(idx > -1){
+      return;
+    }
+    
+    //return;
     let id;
     let name;
     let code;
