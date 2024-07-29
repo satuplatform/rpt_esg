@@ -26,3 +26,71 @@ SGR=ROE×(1−Rasio Dividen)
 
 
 Langkah-langkah ini akan membantu Anda menghitung tingkat pertumbuhan berkelanjutan perusahaan Anda tanpa perlu menambah modal eksternal1.
+
+====
+
+
+Form Input Data Pegawai & Kesimpulan untuk Laporan
+Berdasarkan data di PDF, berikut usulan form input untuk database pegawai dan kesimpulan data untuk membentuk laporan ketenagakerjaan:
+
+Form Input Data Pegawai:
+
+Data Umum:
+
+ID Pegawai: (Auto-generate)
+Nama Pegawai:
+Gender: (Pilihan: Perempuan, Laki-laki, Lainnya)
+Tanggal Lahir:
+Tanggal Mulai Bekerja:
+Wilayah Kerja: (Dropdown list berdasarkan lokasi operasional organisasi)
+Status Ketenagakerjaan: (Dropdown list: Tetap, Tidak Tetap, Pekerja dengan Jam Kerja Tidak Pasti)
+Jenis Pekerjaan: (Dropdown list berdasarkan jenis pekerjaan di organisasi)
+Hubungan Kontrak: (Dropdown list: Langsung dengan organisasi, Melalui Agensi, Kontrak, dll)
+Jam Kerja: (Dropdown list: Penuh Waktu, Paruh Waktu)
+Gaji Pokok:
+Tunjangan: (Input field untuk berbagai tunjangan)
+Bonus: (Input field untuk berbagai bonus)
+Pemberian Saham: (Input field)
+Pemberian Opsi: (Input field)
+Kompensasi Program Insentif Nonekuitas: (Input field)
+Perubahan Nilai Pensiun: (Input field)
+Pendapatan Kompensasi Ditangguhkan & Belum Diperhitungkan: (Input field)
+Tanggal Berhenti Bekerja: (Optional, di isi jika pegawai berhenti bekerja)
+Alasan Berhenti Bekerja: (Optional, di isi jika pegawai berhenti bekerja)
+Satuan Waktu:
+
+Semua data di atas dikumpulkan berdasarkan periode pelaporan tahunan. Data gaji, bonus, dan kompensasi lain adalah akumulasi selama satu tahun.
+Raw Data di Database:
+
+Ya, data ini akan disimpan sebagai raw data di dalam database.
+Kesimpulan Data untuk Laporan Ketenagakerjaan:
+
+1. Profil Tenaga Kerja:
+
+Jumlah total tenaga kerja: Dibedakan berdasarkan gender dan wilayah kerja. (Pengungkapan 2-7a)
+Jumlah pekerja berdasarkan status ketenagakerjaan: Tetap, tidak tetap, pekerja dengan jam kerja tidak pasti, penuh waktu, dan paruh waktu. Dibedakan berdasarkan gender dan wilayah kerja. (Pengungkapan 2-7b)
+Fluktuasi jumlah karyawan: Jelaskan fluktuasi jumlah karyawan yang signifikan selama periode pelaporan dan antar periode pelaporan. (Pengungkapan 2-7e)
+Informasi Kontekstual: Jelaskan faktor-faktor yang mempengaruhi data di atas, seperti perbedaan definisi pekerja tetap dan tidak tetap antar negara, alasan penggunaan pekerja paruh waktu, dll. (Pengungkapan 2-7d)
+2. Pekerja yang Bukan Pekerja Langsung:
+
+Jumlah pekerja yang bukan pekerja langsung: Dibedakan berdasarkan jenis pekerja paling umum dan hubungan kontrak mereka dengan organisasi, serta jenis pekerjaan yang mereka lakukan. (Pengungkapan 2-8a)
+Fluktuasi jumlah pekerja yang bukan pekerja langsung: Jelaskan fluktuasi yang signifikan selama periode pelaporan dan antar periode pelaporan. (Pengungkapan 2-8c)
+3. Rasio Kompensasi:
+
+Rasio kompensasi total tahunan: Rasio kompensasi total tahunan bagi individu dengan bayaran tertinggi di organisasi terhadap median total kompensasi tahunan untuk semua karyawan. (Pengungkapan 2-21a)
+Rasio kenaikan persentase kompensasi total tahunan: Rasio kenaikan persentase dalam kompensasi total tahunan bagi individu dengan bayaran tertinggi di organisasi terhadap kenaikan persentase median total kompensasi tahunan untuk semua karyawan. (Pengungkapan 2-21b)
+Informasi Kontekstual: Jelaskan faktor-faktor yang mempengaruhi rasio kompensasi, seperti ukuran organisasi, sektor, dan strategi ketenagakerjaan. (Pengungkapan 2-21c)
+4. Perjanjian Perundingan Kolektif:
+
+Persentase karyawan yang dicakup oleh perjanjian perundingan kolektif. (Pengungkapan 2-30a)
+Penentuan Syarat dan Ketentuan Ketenagakerjaan: Bagi karyawan yang tidak dicakup perjanjian perundingan kolektif, laporkan dasar penentuan syarat dan ketentuan ketenagakerjaan mereka. (Pengungkapan 2-30b)
+Kesimpulan data ini dapat digunakan untuk:
+
+Menganalisis tren ketenagakerjaan di organisasi.
+Mengidentifikasi potensi kesenjangan dan ketidaksetaraan dalam perlakuan dan kompensasi antar pekerja.
+Mengevaluasi efektivitas kebijakan dan praktik ketenagakerjaan organisasi.
+Meningkatkan transparansi dan akuntabilitas organisasi kepada para pemangku kepentingan.
+Catatan:
+
+Form input dan kesimpulan data di atas hanyalah contoh. Isi dan formatnya dapat disesuaikan dengan kebutuhan dan kondisi spesifik organisasi.
+

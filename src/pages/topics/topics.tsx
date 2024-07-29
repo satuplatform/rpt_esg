@@ -60,7 +60,7 @@ export const TopicsPage = () => {
       width: 180,
       key: 'option',
       valueType: 'option',
-      render: (dom, entity) => [
+      render: (/*dom*/_, entity) => [
         <a
           onClick={() => {
             navigate(`/report/disclosures/${entity.reportId}/${entity._id}`);
@@ -80,6 +80,8 @@ export const TopicsPage = () => {
     afterIndex: number,
     newDataSource: any
   ) => {
+    console.log('beforeIndex ', beforeIndex);
+    console.log('afterIndex ', afterIndex);
     console.log('newDataSource ', newDataSource);
     setDataSource(newDataSource);
     message.success('sukses');

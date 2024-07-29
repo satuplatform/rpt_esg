@@ -1,7 +1,7 @@
 import { useDraggable } from '@dnd-kit/core';
 import { createStyles } from 'antd-style';
 
-const useStyles = createStyles(({ token, css }) => ({
+const useStyles = createStyles(({  }) => ({
   // Supports the writing style of css object
   button: {
     padding: '5px',
@@ -15,7 +15,7 @@ interface IDraggable {
   children: React.ReactNode;
 }
 export const Draggable = ({ id, children }: IDraggable) => {
-  const { styles, cx, theme } = useStyles();
+  const { styles } = useStyles();
   const { attributes, listeners, setNodeRef, transform } = useDraggable({
     id: id,
   });

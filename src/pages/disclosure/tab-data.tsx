@@ -1,10 +1,7 @@
 import type { ProColumns } from '@ant-design/pro-components';
 import {
   EditableProTable,
-  ProCard,
-  ProFormField,
 } from '@ant-design/pro-components';
-import { Button } from 'antd';
 import React, { useState } from 'react';
 
 type DataSourceType = {
@@ -130,9 +127,12 @@ export const TabData = () => {
         type: 'multiple',
         editableKeys,
         actionRender: (row, config, defaultDoms) => {
+          console.log(row)
+          console.log(config)
           return [defaultDoms.delete];
         },
         onValuesChange: (record, recordList) => {
+          console.log(record)
           setDataSource(recordList);
         },
         onChange: setEditableRowKeys,

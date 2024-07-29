@@ -65,7 +65,7 @@ export const SelectStore: React.FC = () => {
         options={options}
         optionRender={(option) => (
           <Space>
-            <span role="img" aria-label={option.data.label}>
+            <span>
               {option.data.emoji}
             </span>
             {option.data.desc}

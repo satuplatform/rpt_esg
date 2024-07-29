@@ -1,8 +1,7 @@
-import { List, Popconfirm, message, Tabs, Button, Spin } from 'antd';
+import { List, message, Tabs, Button, Spin } from 'antd';
 import { useEffect, useState } from 'react';
 import type { TabsProps } from 'antd';
 import { DndContext } from '@dnd-kit/core';
-import { useImmer } from 'use-immer';
 import { Droppable } from './droppable';
 import { Draggable } from './draggable';
 import { createStyles } from 'antd-style';
@@ -22,7 +21,7 @@ import {
 import { Tree } from 'antd';
 import type { TreeDataNode } from 'antd';
 
-const useStyles = createStyles(({ token, css }) => ({
+const useStyles = createStyles(({ /*token,*/ css }) => ({
   flexRow: css`
     display: flex;
     flexdirection: row;
@@ -35,25 +34,31 @@ const useStyles = createStyles(({ token, css }) => ({
   `,
 }));
 
+interface IDataDisclosure {
+  disclosureId: string
+  name: string
+  code: string
+}
+
 export const DisclosurePage = () => {
-  const { styles, cx, theme } = useStyles();
+  const { styles, cx } = useStyles();
   let { reportId, topicId } = useParams();
   const [spinning, setSpinning] = useState(false);
   const [topic, setTopic] = useState('');
   const [token, setToken] = useState(0);
-  const [dataDisclosures, setDataDisclosures] = useState([]);
+  const [dataDisclosures, setDataDisclosures] = useState<IDataDisclosure[]>([]);
   const [treeData, setTreeData] = useState<TreeDataNode[]>([]);
   const [listRequirements, setListRequirements] = useState([]);
 
   const [prompt, setPrompt] = useState('');
   const [instruction, setInstruction] = useState('');
 
-  const { data: dataSourceTree, refetch } = useQuery({
+  const { data: dataSourceTree } = useQuery({
     queryKey: ['new-report-disclosures-tree'],
     queryFn: () => fetch('/api/disclosures/tree').then((res) => res.json()),
   });
 
-  const { data: dataSourceTopic, refetch: refretchTopic } = useQuery({
+  const { data: dataSourceTopic } = useQuery({
     queryKey: ['new-report-topic-id'],
     queryFn: () =>
       fetch(`/api/report/new-report/topic?id=${topicId}`).then((res) =>
@@ -232,7 +237,7 @@ export const DisclosurePage = () => {
     setSpinning(false);
   };
 
-  const onConfirmDiscDelete = async (dt) => {
+  const onConfirmDiscDelete = async (dt: any) => {
     console.log(dt)
     const url = `/api/report/new-report/disclosures/delete?${dt._id}`;
     const rawResponse = await fetch(url);
@@ -405,7 +410,7 @@ export const DisclosurePage = () => {
     </div>
   );
 
-  function handleDragEnd(event) {
+  function handleDragEnd(event: any) {
     const { active, over } = event;
     
     if(over == null){
@@ -423,7 +428,7 @@ export const DisclosurePage = () => {
     let code;
     let type;
     let lang;
-    let rname;
+    let rname = '';
     for (let i = 0; i < dataSourceTree.data.length; i++) {
       for (let x = 0; x < dataSourceTree.data[i].children.length; x++) {
         if (dataSourceTree.data[i].children[x]._id == active.id) {

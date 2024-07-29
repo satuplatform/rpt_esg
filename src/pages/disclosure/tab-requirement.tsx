@@ -1,7 +1,6 @@
-import { Spin, Button, Collapse, Input } from 'antd';
-import { useRef, useEffect, useState } from 'react';
+import { Collapse, Input } from 'antd';
+import { useEffect, useState } from 'react';
 import type { CollapseProps } from 'antd';
-import { mainDisclosure, IDisclosure } from './main-disclosure';
 import Splitter, { SplitDirection } from '@devbookhq/splitter';
 const { TextArea } = Input;
 import { createStyles } from 'antd-style';
@@ -10,13 +9,13 @@ import { createStyles } from 'antd-style';
 export const TabRequirement = ({listRequirements}: {listRequirements: Array<any>}) => {
   const [requirements, setRequirements] = useState<CollapseProps['items']>([]);
 
-  const useStyles = createStyles(({ token, css }) => ({
+  const useStyles = createStyles(({ css }) => ({
     gutter: css`
       background: #dfd3c3;
     `,
   }));
 
-  const { styles, cx, theme } = useStyles();
+  const { styles, cx } = useStyles();
 
   useEffect(() => {
     if(listRequirements){

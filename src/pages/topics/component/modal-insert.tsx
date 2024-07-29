@@ -1,21 +1,10 @@
-import { PlusOutlined } from '@ant-design/icons';
 import {
   ModalForm,
-  ProForm,
-  ProFormDateRangePicker,
-  ProFormSelect,
   ProFormText,
   ProFormTextArea,
 } from '@ant-design/pro-components';
-import { Button, Form, message } from 'antd';
+import { Form, message } from 'antd';
 
-const waitTime = (time: number = 100) => {
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      resolve(true);
-    }, time);
-  });
-};
 
 interface IModalTopicInsert {
   show: boolean;

@@ -1,9 +1,7 @@
 import { Col, Row, Card } from 'antd';
 import { ProCard, StatisticCard } from '@ant-design/pro-components';
 import RcResizeObserver from 'rc-resize-observer';
-import { useState } from 'react';
-import { Badge, Descriptions } from 'antd';
-import type { DescriptionsProps } from 'antd';
+import { useEffect, useState } from 'react';
 
 const imgStyle = {
   display: 'block',
@@ -11,26 +9,12 @@ const imgStyle = {
   height: 42,
 };
 
-const items: DescriptionsProps['items'] = [
-  {
-    key: '1',
-    label: 'Product',
-    children: 'Cloud Database',
-  },
-  {
-    key: '2',
-    label: 'Billing Mode',
-    children: 'Prepaid',
-  },
-  {
-    key: '3',
-    label: 'Automatic Renewal',
-    children: 'YES',
-  },
-];
-
 export const SustainibilityPage = () => {
   const [responsive, setResponsive] = useState(false);
+  useEffect(() => {
+    console.log('responsive ', responsive)
+  }, [])
+
   return (
     <Row gutter={[16, 16]}>
       <Col span={12}>

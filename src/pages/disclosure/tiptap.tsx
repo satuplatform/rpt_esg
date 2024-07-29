@@ -6,12 +6,10 @@ import TextStyle from '@tiptap/extension-text-style';
 import {
   useEditor,
   EditorContent,
-  FloatingMenu,
-  BubbleMenu,
 } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
 import { useEffect } from 'react';
-import { Button, Flex } from 'antd';
+import { Button } from 'antd';
 // define your extension array
 const MenuBar = ({ editor }: { editor: any }) => {
   if (!editor) {
@@ -203,7 +201,7 @@ const MenuBar = ({ editor }: { editor: any }) => {
 
 const extensions = [
   Color.configure({ types: [TextStyle.name, ListItem.name] }),
-  TextStyle.configure({ types: [ListItem.name] }),
+  TextStyle.configure({  }), //types: [ListItem.name]
   StarterKit.configure({
     bulletList: {
       keepMarks: true,

@@ -7,7 +7,7 @@ interface IDroppable {
   children: React.ReactNode;
 }
 
-export const Droppable = ({ id, key, children }: IDroppable) => {
+export const Droppable = ({ id, children }: IDroppable) => {
   const  { isOver, setNodeRef } = useDroppable({
     id: id,
   });

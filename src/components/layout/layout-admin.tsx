@@ -3,7 +3,7 @@ import type { ProSettings } from '@ant-design/pro-components';
 import {
   ProConfigProvider,
   ProLayout,
-  SettingDrawer,
+  SettingDrawer
 } from '@ant-design/pro-components';
 import { ConfigProvider, Dropdown, message } from 'antd';
 import { useEffect, useState, useContext } from 'react';
@@ -19,6 +19,20 @@ import { UserContext } from '..';
 import { NewReportModalForm } from '@/components/new-report';
 import { useQuery } from '@tanstack/react-query';
 import { useImmer } from 'use-immer';
+
+// export interface Route {
+//   path: string;
+//   routes?: Route;
+//   children?: Array<{
+//     exact?: boolean;
+//     emoji: string;
+//     name: string;
+//     path: string;
+//     // Optional secondary menu
+//     children?: Route['children'];
+//     routes?: Route;
+//   }>;
+// }
 
 const masterRoute = {
   path: '/',
@@ -42,37 +56,13 @@ const masterRoute = {
       name: 'New Report',
       icon: <Icon path={mdiPlusCircleOutline} size={0.7} />,
       path: '/',
+      routes: []
     },
     {
       name: 'Report',
       icon: <Icon path={mdiBasket} size={0.7} />,
       path: '/report',
       routes: [
-        // {
-        //   path: '/report/detail',
-        //   name: 'Report Satu',
-        //   routes: [
-        //     {
-        //       path: '/report/topics',
-        //       name: 'Topic',
-        //       hideChildrenInMenu: true,
-        //       routes: [
-        //         {
-        //           path: '/report/disclosures',
-        //           name: 'Disclosures',
-        //         },
-        //       ],
-        //     },
-        //     {
-        //       path: '/report/preview',
-        //       name: 'Preview',
-        //     },
-        //     {
-        //       path: '/report/data',
-        //       name: 'Data',
-        //     },
-        //   ],
-        // },
       ],
     },
     {
@@ -136,42 +126,45 @@ export const LayoutAdmin = () => {
     if (dataReport) {
       setRoute((dataP) => {
         let repp = dataP.routes;
-        let idxx = repp.findIndex((d) => d.name == 'Report');
-        if (idxx > -1) {
-          let rep = repp[idxx].routes;
-          if (rep) {
-            for (let i = 0; i < dataReport.data.length; i++) {
-              let idx = rep.findIndex((d) => d.name == dataReport.data[i].name);
-              if (idx < 0) {
-                rep.push({
-                  name: dataReport.data[i].name,
-                  path: '/report/detail',
-                  routes: [
-                    {
-                      path: `/report/topics/${dataReport.data[i]._id}`,
-                      name: 'Topic',
-                      hideChildrenInMenu: true,
-                      routes: [
-                        {
-                          path: '/report/disclosures',
-                          name: 'Disclosures',
-                        },
-                      ],
-                    },
-                    {
-                      path: `/report/preview/${dataReport.data[i]._id}`,
-                      name: 'Preview',
-                    },
-                    {
-                      path: `/report/data/${dataReport.data[i]._id}`,
-                      name: 'Data',
-                    },
-                  ],
-                });
+        if(repp){
+          let idxx = ((repp as unknown) as Array<any>).findIndex((d) => d.name == 'Report');
+          if (idxx > -1) {
+            let rep = ((repp as unknown) as Array<any>)[idxx].routes;
+            if (rep) {
+              for (let i = 0; i < dataReport.data.length; i++) {
+                let idx = rep.findIndex((d) => d.name == dataReport.data[i].name);
+                if (idx < 0) {
+                  rep.push({
+                    name: dataReport.data[i].name,
+                    path: '/report/detail',
+                    routes: [
+                      {
+                        path: `/report/topics/${dataReport.data[i]._id}`,
+                        name: 'Topic',
+                        hideChildrenInMenu: true,
+                        routes: [
+                          {
+                            path: '/report/disclosures',
+                            name: 'Disclosures',
+                          },
+                        ],
+                      },
+                      {
+                        path: `/report/preview/${dataReport.data[i]._id}`,
+                        name: 'Preview',
+                      },
+                      {
+                        path: `/report/data/${dataReport.data[i]._id}`,
+                        name: 'Data',
+                      },
+                    ],
+                  });
+                }
               }
             }
           }
         }
+        
       });
     }
   }, [dataReport]);
