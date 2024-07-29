@@ -20,6 +20,8 @@ import {
 } from '@ant-design/icons';
 import { Tree } from 'antd';
 import type { TreeDataNode } from 'antd';
+import { TiptapWrapContext } from './tiptap_wrapcontext';
+import { useEditorContext } from '@/context/tiptap_context';
 
 const useStyles = createStyles(({ /*token,*/ css }) => ({
   flexRow: css`
@@ -52,6 +54,7 @@ export const DisclosurePage = () => {
 
   const [prompt, setPrompt] = useState('');
   const [instruction, setInstruction] = useState('');
+  const editor=useEditorContext();
 
   const { data: dataSourceTree } = useQuery({
     queryKey: ['new-report-disclosures-tree'],
@@ -370,10 +373,23 @@ export const DisclosurePage = () => {
     },
   ];
 
-  const operations = <Button type="primary">Save</Button>;
+  const operations = <Button type="primary" onClick={ async ()=>{
+    const content = editor?.getHTML();
+    if (content) {
+      await fetch(`/api/report/new-report/topic/${topicId}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ content }),
+      });
+    }
+
+  }}>Save</Button>;
 
   return (
     <div>
+     
       <Spin spinning={spinning} fullscreen />
       <div style={{ marginBottom: '4px' }}>topik : {topic}</div>
       <Splitter
@@ -408,6 +424,7 @@ export const DisclosurePage = () => {
         </div>
       </Splitter>
     </div>
+
   );
 
   function handleDragEnd(event: any) {

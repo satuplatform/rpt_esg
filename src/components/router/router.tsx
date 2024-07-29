@@ -8,6 +8,7 @@ import { TopicsPage } from '@/pages/topics';
 import { DataPage } from '@/pages/data';
 import { PreviewPage } from '@/pages/preview';
 import { PerformancePage, SustainibilityPage } from '@/pages/dashboard';
+import { TiptapWrapContext } from '@/pages/disclosure/tiptap_wrapcontext';
 
 export const router = createBrowserRouter([
   {
@@ -20,7 +21,7 @@ export const router = createBrowserRouter([
       { path: '/report', element: <ReportPage /> },
       {
         path: '/report/disclosures/:reportId/:topicId',
-        element: <DisclosurePage />,
+        element:  <TiptapWrapContext ><DisclosurePage /></TiptapWrapContext>,
       },
       { path: '/report/topics/:reportId', element: <TopicsPage /> },
       { path: '/report/preview/:reportId', element: <PreviewPage /> },
