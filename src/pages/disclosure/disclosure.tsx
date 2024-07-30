@@ -20,6 +20,7 @@ import {
 } from '@ant-design/icons';
 import { Tree } from 'antd';
 import type { TreeDataNode } from 'antd';
+import { useEditorContext } from '@/context/tiptap_context';
 
 const useStyles = createStyles(({ /*token,*/ css }) => ({
   flexRow: css`
@@ -52,6 +53,7 @@ export const DisclosurePage = () => {
 
   const [prompt, setPrompt] = useState('');
   const [instruction, setInstruction] = useState('');
+  const editor=useEditorContext();
 
   const { data: dataSourceTree } = useQuery({
     queryKey: ['new-report-disclosures-tree'],
@@ -71,6 +73,7 @@ export const DisclosurePage = () => {
   useEffect(() => {
     if (dataSourceTopic) {
       setTopic(dataSourceTopic.data[0].name);
+      setContent(dataSourceTopic.data[0].content);
     }
   }, [dataSourceTopic]);
 
@@ -373,10 +376,29 @@ export const DisclosurePage = () => {
     },
   ];
 
-  const operations = <Button type="primary">Save</Button>;
+  const operations = <Button type="primary" onClick={ async ()=>{
+    const content = editor?.getHTML();
+    if (content) {
+     const res= await fetch(`/api/report/new-report/topic/${topicId}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ content }),
+      });
+      const result=await res.json();
+      if(result['success']){
+        message.success('Save Success');
+      }else{
+        message.error('Save Failed');
+      }
+    }
+
+  }}>Save</Button>;
 
   return (
     <div>
+     
       <Spin spinning={spinning} fullscreen />
       <div style={{ marginBottom: '4px' }}>topik : {topic}</div>
       <Splitter
@@ -411,6 +433,7 @@ export const DisclosurePage = () => {
         </div>
       </Splitter>
     </div>
+
   );
 
   function handleDragEnd(event: any) {

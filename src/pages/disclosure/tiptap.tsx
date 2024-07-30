@@ -10,6 +10,7 @@ import {
 import StarterKit from '@tiptap/starter-kit';
 import { useEffect } from 'react';
 import { Button } from 'antd';
+import { useEditorContext } from '@/context/tiptap_context';
 // define your extension array
 const MenuBar = ({ editor }: { editor: any }) => {
   if (!editor) {
@@ -218,20 +219,21 @@ interface IPropsTiptap {
   content: string;
 }
 export const Tiptap = ({ content }: IPropsTiptap) => {
-  const editor = useEditor({
-    extensions,
-    content,
-    editorProps: {
-      attributes: {
-        autocomplete: 'off',
-        autocorrect: 'off',
-        autocapitalize: 'off',
-        class: 'min-h-full',
-        spellcheck: 'false',
-        tabindex: '0',
-      },
-    },
-  });
+  const editor =useEditorContext();
+  // const editor = useEditor({
+  //   extensions,
+  //   content,
+  //   editorProps: {
+  //     attributes: {
+  //       autocomplete: 'off',
+  //       autocorrect: 'off',
+  //       autocapitalize: 'off',
+  //       class: 'min-h-full',
+  //       spellcheck: 'false',
+  //       tabindex: '0',
+  //     },
+  //   },
+  // });
 
   useEffect(() => {
     if (editor) {
@@ -240,8 +242,8 @@ export const Tiptap = ({ content }: IPropsTiptap) => {
   }, [content]);
 
   return (
-    <>
-      <MenuBar editor={editor} />
+    <> 
+      <MenuBar editor={editor} /> 
       <EditorContent editor={editor} />
 
       {/* <FloatingMenu editor={editor}>This is the floating menu</FloatingMenu>
