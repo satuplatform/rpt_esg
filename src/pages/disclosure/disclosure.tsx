@@ -20,7 +20,6 @@ import {
 } from '@ant-design/icons';
 import { Tree } from 'antd';
 import type { TreeDataNode } from 'antd';
-import { TiptapWrapContext } from './tiptap_wrapcontext';
 import { useEditorContext } from '@/context/tiptap_context';
 
 const useStyles = createStyles(({ /*token,*/ css }) => ({
@@ -74,6 +73,7 @@ export const DisclosurePage = () => {
   useEffect(() => {
     if (dataSourceTopic) {
       setTopic(dataSourceTopic.data[0].name);
+      setContent(dataSourceTopic.data[0].content);
     }
   }, [dataSourceTopic]);
 
@@ -376,13 +376,19 @@ export const DisclosurePage = () => {
   const operations = <Button type="primary" onClick={ async ()=>{
     const content = editor?.getHTML();
     if (content) {
-      await fetch(`/api/report/new-report/topic/${topicId}`, {
+     const res= await fetch(`/api/report/new-report/topic/${topicId}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({ content }),
       });
+      const result=await res.json();
+      if(result['success']){
+        message.success('Save Success');
+      }else{
+        message.error('Save Failed');
+      }
     }
 
   }}>Save</Button>;
