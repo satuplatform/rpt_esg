@@ -163,17 +163,20 @@ export const DisclosurePage = () => {
           let chd = dataSourceTree.data[x].children;
           let chdc = [];
           for (let xx = 0; xx < chd.length; xx++) {
-            chdc.push({
-              title: (
-                <Draggable id={chd[xx]._id}>
-                  <>
-                    <div>{chd[xx].code}</div>
-                    <div>{chd[xx].name}</div>
-                  </>
-                </Draggable>
-              ),
-              key: chd[xx]._id,
-            });
+            if(chd[xx].code != 'cover1'){
+              chdc.push({
+                title: (
+                  <Draggable id={chd[xx]._id}>
+                    <>
+                      <div>{chd[xx].code}</div>
+                      <div>{chd[xx].name}</div>
+                    </>
+                  </Draggable>
+                ),
+                key: chd[xx]._id,
+              });
+            }
+            
           }
           if (dataSourceTree.data[x].type == arrType[i]) {
             children.push({
