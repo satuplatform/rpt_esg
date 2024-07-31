@@ -7,8 +7,9 @@ import {
   useEditor,
 } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
-import { ReactNode } from 'react';
+import {  ReactNode } from 'react';
 // define your extension array
+
 
 const extensions = [
   Color.configure({ types: [TextStyle.name, ListItem.name] }),
