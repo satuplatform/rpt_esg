@@ -4,6 +4,8 @@ export interface IDisclosure {
   name?: string;
   code?: string;
   requirements?: Array<any>;
+  topicId?: string;
+  reportId?: string;
   instruction: string;
   prompt: string;
 }

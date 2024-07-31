@@ -9,7 +9,7 @@ import { Tiptap } from './tiptap';
 import Splitter, { SplitDirection } from '@devbookhq/splitter';
 import { IDisclosure } from './main-disclosure';
 import { marked } from 'marked';
-import { TabData } from './tab-data';
+import { TabData, ITabData } from './tab-data';
 import { TabRequirement } from './tab-requirement';
 import { useParams } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
@@ -50,6 +50,7 @@ export const DisclosurePage = () => {
   const [dataDisclosures, setDataDisclosures] = useState<IDataDisclosure[]>([]);
   const [treeData, setTreeData] = useState<TreeDataNode[]>([]);
   const [listRequirements, setListRequirements] = useState([]);
+  const [dataForm, setDataForm] = useState<Array<ITabData>>([]);
 
   const [prompt, setPrompt] = useState('');
   const [instruction, setInstruction] = useState('');
@@ -233,6 +234,9 @@ export const DisclosurePage = () => {
     const jsonData = await rawResponse.json();
     if (jsonData.success) {
       let ct = jsonData.data.candidates[0].content.parts[0].text;
+      let cform = jsonData.formInput;
+      setDataForm(cform);
+      console.log('dataForm 1 ', cform)
       const html = await marked.parse(ct);
 
       console.log(html);
@@ -292,7 +296,9 @@ export const DisclosurePage = () => {
                     onClick={() => {
                       onFinish({
                         instruction:instruction,
-                        prompt:prompt
+                        prompt:prompt,
+                        reportId, 
+                        topicId
                       })
                     }}
                   >
@@ -372,7 +378,7 @@ export const DisclosurePage = () => {
     {
       key: '3',
       label: 'Data',
-      children: <TabData />,
+      children: <TabData dataForm={dataForm}/>,
     },
   ];
 
