@@ -21,7 +21,7 @@ export const router = createBrowserRouter([
       { path: '/report', element: <ReportPage /> },
       {
         path: '/report/disclosures/:reportId/:topicId',
-        element:  <TiptapWrapContext ><DisclosurePage /></TiptapWrapContext>,
+        element:  <DisclosurePage />,
       },
       { path: '/report/topics/:reportId', element: <TopicsPage /> },
       { path: '/report/preview/:reportId', element: <PreviewPage /> },
