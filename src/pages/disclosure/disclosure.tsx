@@ -305,7 +305,10 @@ export const DisclosurePage = () => {
                   >
                     Generate
                   </Button>
-                  <Button>Update</Button>
+                  <Button onClick={() => {
+                    let md = editor?.storage.markdown.getMarkdown();
+                    console.log('md ', md)
+                  }}>Update</Button>
                 </div>
               </div>
             </div>

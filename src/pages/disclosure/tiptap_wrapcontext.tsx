@@ -8,10 +8,12 @@ import {
 } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
 import {  ReactNode } from 'react';
+import { Markdown } from 'tiptap-markdown';
 // define your extension array
 
 
 const extensions = [
+  Markdown,
   Color.configure({ types: [TextStyle.name, ListItem.name] }),
   TextStyle.configure({  }), //types: [ListItem.name]
   StarterKit.configure({
