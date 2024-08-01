@@ -2,14 +2,14 @@ import type { ProColumns } from '@ant-design/pro-components';
 import {
   EditableProTable,
 } from '@ant-design/pro-components';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
-type DataSourceType = {
-  id: React.Key;
-  name?: string;
-  value?: string;
-  children?: DataSourceType[];
-};
+// type DataSourceType = {
+//   id: React.Key;
+//   name?: string;
+//   value?: string;
+//   children?: DataSourceType[];
+// };
 
 //   const defaultData: DataSourceType[] = new Array(20).fill(1).map((_, index) => {
 //     return {
@@ -19,52 +19,35 @@ type DataSourceType = {
 //     };
 //   });
 
-const defaultData: DataSourceType[] = [
-  {
-    id: 1,
-    name: 'Nama perusahaan',
-    value: '',
-  },
-  {
-    id: 2,
-    name: 'Nama Dagang',
-    value: '',
-  },
-  {
-    id: 3,
-    name: 'Alamat Perusahaan',
-    value: '',
-  },
-  {
-    id: 4,
-    name: 'Registration Number',
-    value: '',
-  },
-  {
-    id: 5,
-    name: 'Notaris',
-    value: '',
-  },
-  {
-    id: 6,
-    name: 'Alamat',
-    value: '',
-  },
-];
+const defaultData: ITabData[] = [];
 
-export const TabData = () => {
+export interface ITabData {
+  field: string,
+  nama_field: string,
+  label: string,
+  type: string
+}
+
+export const TabData = ({dataForm}:{dataForm:Array<ITabData>}) => {
   const [editableKeys, setEditableRowKeys] = useState<React.Key[]>(() =>
-    defaultData.map((item) => item.id)
+    defaultData.map((item) => item.nama_field)
   );
-  const [dataSource, setDataSource] = useState<readonly DataSourceType[]>(
+  const [dataSource, setDataSource] = useState<readonly ITabData[]>(
     () => defaultData
   );
+  console.log('dataForm 2 ', dataForm)
 
-  const columns: ProColumns<DataSourceType>[] = [
+  useEffect(() => {
+    if(dataForm){
+      setDataSource(dataForm)
+    }
+  }, [dataForm])
+
+  const columns: ProColumns<ITabData>[] = [
     {
       title: 'Name',
-      key: 'name',
-      dataIndex: 'name',
+      key: 'label',
+      dataIndex: 'label',
       width: '40%',
       editable: false,
     },
@@ -99,10 +82,10 @@ export const TabData = () => {
   ];
 
   return (
-    <EditableProTable<DataSourceType>
+    <EditableProTable<ITabData>
       headerTitle="Data Index"
       columns={columns}
-      rowKey="id"
+      rowKey="nama_field"
       scroll={{
         x: 460,
         y: 430,
