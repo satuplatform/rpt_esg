@@ -75,6 +75,7 @@ export const DisclosurePage = () => {
     if (dataSourceTopic) {
       setTopic(dataSourceTopic.data[0].name);
       setContent(dataSourceTopic.data[0].content);
+      setDataForm(dataSourceTopic.data[0].form);
     }
   }, [dataSourceTopic]);
 
@@ -384,13 +385,14 @@ export const DisclosurePage = () => {
 
   const operations = <Button type="primary" onClick={ async ()=>{
     const content = editor?.getHTML();
+    
     if (content) {
      const res= await fetch(`/api/report/new-report/topic/${topicId}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ content }),
+        body: JSON.stringify({content: content,form:dataForm }),
       });
       const result=await res.json();
       if(result['success']){
