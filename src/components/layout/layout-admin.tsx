@@ -129,7 +129,7 @@ export const LayoutAdmin = () => {
         if(repp){
           let idxx = ((repp as unknown) as Array<any>).findIndex((d) => d.name == 'Report');
           if (idxx > -1) {
-            let rep = ((repp as unknown) as Array<any>)[idxx].routes;
+            let rep:Array<any> = ((repp as unknown) as Array<any>)[idxx].routes;
             if (rep) {
               for (let i = 0; i < dataReport.data.length; i++) {
                 let idx = rep.findIndex((d) => d.name == dataReport.data[i].name);

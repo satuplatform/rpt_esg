@@ -8,7 +8,7 @@ import { TopicsPage } from '@/pages/topics';
 import { DataPage } from '@/pages/data';
 import { PreviewPage } from '@/pages/preview';
 import { PerformancePage, SustainibilityPage } from '@/pages/dashboard';
-import { TiptapWrapContext } from '@/pages/disclosure/tiptap_wrapcontext';
+//import { TiptapWrapContext } from '@/pages/disclosure/tiptap_wrapcontext';
 
 export const router = createBrowserRouter([
   {

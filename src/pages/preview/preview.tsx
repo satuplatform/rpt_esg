@@ -1,6 +1,6 @@
 import { useEditorContext } from '@/context/tiptap_context';
 import { EyeOutlined } from '@ant-design/icons';
-import { Button, message, Spin } from 'antd';
+import { Button, Spin } from 'antd';
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import noImage from './../../assets/images/no-image.jpeg';
@@ -8,8 +8,8 @@ import { defaultMarks, defaultNodes, DocxSerializer, writeDocx } from '@/compone
 import {AlignmentType} from 'docx';
 import {Buffer} from 'buffer';
 import {saveAs} from 'file-saver';
-import { Schema, DOMParser as ProseMirrorDOMParser } from 'prosemirror-model';
-import { schema as basicSchema } from 'prosemirror-schema-basic';
+//import { Schema, DOMParser as ProseMirrorDOMParser } from 'prosemirror-model';
+//import { schema as basicSchema } from 'prosemirror-schema-basic';
 
 // @ts-ignore
 window.Buffer = Buffer;

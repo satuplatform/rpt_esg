@@ -13,7 +13,7 @@ import {
   SequentialIdentifier,
   Bookmark,
   ImageRun,
-  AlignmentType,
+  //AlignmentType,
   Table,
   TableRow,
   TableCell,
@@ -27,6 +27,22 @@ import sizeOf from 'buffer-image-size';
 import {createNumbering, NumberingStyles} from './numbering';
 import {createDocFromState, createShortId} from './utils';
 import {IFootnotes, INumbering, Mutable} from './types';
+
+enum AlignmentType {
+  START= "start",
+   CENTER= "center",
+   END= "end",
+   BOTH= "both",
+   MEDIUM_KASHIDA= "mediumKashida",
+   DISTRIBUTE= "distribute",
+   NUM_TAB= "numTab",
+   HIGH_KASHIDA= "highKashida",
+   LOW_KASHIDA= "lowKashida",
+   THAI_DISTRIBUTE= "thaiDistribute",
+   LEFT= "left",
+   RIGHT= "right",
+   JUSTIFIED= "both",
+};
 
 export type AnyObject = {
   [k: string]: any;
@@ -82,7 +98,7 @@ function createReferenceBookmark(
 //   });
 // };
 
-export const parseString = function (str) {
+export const parseString = function (str: string) {
   let list: AnyObject = {};
 
   str &&
@@ -190,6 +206,7 @@ export class DocxSerializerState {
       };
       this.current = [];
     };
+    // @ts-ignore
     const progress = (node: Node, offset: number, index: number) => {
       const links = node.marks.filter((m) => m.type.name === 'link');
       const hasLink = links.length > 0;
@@ -288,7 +305,7 @@ export class DocxSerializerState {
   ) {
     if (src === null || undefined) return;
     try {
-      const buffer = Buffer.from(src);
+      const buffer = Buffer.from(src as ArrayBuffer);
       const dimensions = sizeOf(buffer);
       //console.log(`di image2 src =0 ${dimensions.height} x ${dimensions.width}`);
       const aspect = dimensions.height / dimensions.width;
@@ -304,7 +321,7 @@ export class DocxSerializerState {
       this.current.push(img);
       let alignment: AlignmentType;
       switch (align) {
-        case 'right':
+        case AlignmentType.RIGHT:
           alignment = AlignmentType.RIGHT;
           break;
         case 'left':
@@ -368,11 +385,11 @@ export class DocxSerializerState {
   //   // });
   // }
 
-  figcaption(state, node) {
+  figcaption(state: DocxSerializerState, node: Node) {
     node.forEach((child) => {
       if (child.text) {
         if (child.text.length > 0) {
-          let opt = {shading: {fill: 'EEEEEE'}};
+          let opt:{shading?: any, alignment?: AlignmentType} = {shading: {fill: 'EEEEEE'}};
           let alignment = AlignmentType.CENTER;
           opt['alignment'] = alignment;
           //opt['alignment'] = VerticalPositionAlign.TOP;
@@ -420,7 +437,7 @@ export class DocxSerializerState {
       let tableHeader = true;
       this.maxImageWidth = MAX_IMAGE_WIDTH / rowContent.childCount;
       rowContent.forEach((cell) => {
-        let opt = {};
+        let opt:{alignment?: AlignmentType} = {};
         if (cell.type.name !== 'tableHeader') {
           tableHeader = false;
         }
@@ -513,7 +530,7 @@ export class DocxSerializerState {
             columnSpan: colspan,
             rowSpan: rowspan,
             margins: {
-              marginUnitType: 'nil' as WidthType,
+              marginUnitType: 'nil', // as WidthType
               top: 15,
               bottom: 15,
               left: 15,
@@ -579,6 +596,7 @@ export class DocxSerializerState {
     this.current.push(new FootnoteReferenceRun(this.$footnoteCounter));
   }
 
+  // @ts-ignore
   closeBlock(node: Node, props?: IParagraphOptions) {
     const paragraph = new Paragraph({
       children: this.current,
