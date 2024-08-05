@@ -34,7 +34,7 @@ export const TopicsPage = () => {
   const [dataSource, setDataSource] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const actionRef = useRef<ActionType>();
-
+  
   const columns: ProColumns[] = [
     {
       title: '',
@@ -90,8 +90,14 @@ export const TopicsPage = () => {
   const { data: dataSourceAsli, refetch } = useQuery({
     queryKey: ['new-report-topic'],
     queryFn: () =>
-      fetch('/api/report/new-report/topic').then((res) => res.json()),
+      fetch(`/api/report/new-report/topic?reportId=${reportId}`).then((res) => res.json()),
   });
+
+  useEffect(() => {
+    if(reportId){
+      refetch()
+    }
+  }, [reportId])
 
   useEffect(() => {
     if (dataSourceAsli) {
