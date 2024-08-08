@@ -75,19 +75,20 @@ export const DisclosurePage = () => {
       setTopic(dataSourceTopic.data[0].name);
       setContent(dataSourceTopic.data[0].content);
       // setDataForm(dataSourceTopic.data[0].form);
-      parseFormAnswer(dataSourceTopic.data[0].form);
+      parseFormAnswer(dataSourceTopic.data[0].form,dataSourceTopic?.data[0]?.answer);
     }
   }, [dataSourceTopic]);
 
-  const parseFormAnswer = (formData: any) => {
+  const parseFormAnswer = (formData: any,answer:any) => {
     const form = formData;
-    const answer = dataSourceTopic?.data[0]?.answer??{};
+    
+    // let answer = dataSourceTopic?.data[0]?.answer??{};
     let resMerge = formData;
 
     
    
-    resMerge = form.map((item: any) => {
-      console.log('answerrrrparse',answer[item.id]);
+    resMerge = form?.map((item: any) => {
+      console.log('answerrrrparse',answer, answer[item.id],item.id);
       return {
         ...item,
         value: answer[item.id],
@@ -100,7 +101,6 @@ export const DisclosurePage = () => {
   };
 
 
-  
 
   const getBahan = async (values: any) => {
     let url = `/api/report/new-report/instructions`;
@@ -136,7 +136,10 @@ export const DisclosurePage = () => {
       console.log('jsonDataForm ', jsonData);
 
       // setDataForm(jsonData.data);
-      parseFormAnswer(jsonData.data);
+        const answer=dataSourceTopic?.data[0]?.answer;
+        parseFormAnswer(jsonData.data,answer);
+      
+    
     }
   };
 
