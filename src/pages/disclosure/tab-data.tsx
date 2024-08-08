@@ -28,6 +28,7 @@ export interface ITabData {
   type: string;
   tipe_data: string;
   id: string;
+  value:string;
 }
 interface TabDataProps {
   dataForm: Array<ITabData>;
@@ -59,43 +60,63 @@ export const TabData = ({ dataForm, setAnswer }: TabDataProps) => {
     },
     {
       title: 'Value',
-      key: 'value',
-      dataIndex: 'value',
+      key: 'answer',
+      dataIndex: 'answer',
       render: (text, record) => {
-        console.log('texttttttttt', text);
+        console.log('texttttttttt',text, record['value']);
 
         if (record.tipe_data === 'text') {
           // return <Input defaultValue={text as string=='-' ? undefined :text as string}  />;
           return (
             <Form.Item
+              // name={record.nama_field}
               name={['data', record.nama_field, 'value']}
               rules={[
                 { required: true, message: `${record.label} is required` },
               ]}
+              initialValue={record.value} 
             >
-              <Input />
+              <Input  />
             </Form.Item>
           );
         } else if (record.tipe_data === 'year') {
           return (
             <Form.Item
-              name={['data', record.nama_field, 'value']}
+            name={['data', record.nama_field, 'value']}
               rules={[
                 { required: true, message: `${record.label} is required` },
               ]}
+              initialValue={record.value ? dayjs(record.value) : null}
             >
-              <DatePicker picker="year" />
+              <DatePicker picker="year"  />
             </Form.Item>
           );
           // return <DatePicker picker="year" defaultValue={text !='-' ? dayjs(text as string, 'YYYY') : undefined} />;
         } else if (record.tipe_data === 'date') {
           return (
+            <Form.Item
+            name={['data', record.nama_field, 'value']}
+            rules={[
+              { required: true, message: `${record.label} is required` },
+            ]}
+            initialValue={record.value ? dayjs(record.value) : null}
+          >
             <DatePicker
-              defaultValue={text != '-' ? dayjs(text as string) : undefined}
+             
             />
+          </Form.Item>
+            
           );
         } else if (record.tipe_data === 'number') {
-          return <InputNumber defaultValue={text ? Number(text) : undefined} />;
+          <Form.Item
+          name={['data', record.nama_field, 'value']}
+          rules={[
+            { required: true, message: `${record.label} is required` },
+          ]}
+          initialValue={record.value} 
+        >
+          <InputNumber defaultValue={text ? Number(text) : undefined} />
+        </Form.Item>
         }
         return text;
       },
@@ -105,6 +126,7 @@ export const TabData = ({ dataForm, setAnswer }: TabDataProps) => {
   console.log('answerrrrrrrrrrrr',dataSource);
 
   return (
+    <Form>
     <EditableProTable<ITabData>
       headerTitle="Data Index"
       columns={columns}
@@ -160,5 +182,6 @@ export const TabData = ({ dataForm, setAnswer }: TabDataProps) => {
         onChange: setEditableRowKeys,
       }}
     />
+    </Form>
   );
 };

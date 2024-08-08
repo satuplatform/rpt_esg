@@ -76,9 +76,23 @@ export const DisclosurePage = () => {
     if (dataSourceTopic) {
       setTopic(dataSourceTopic.data[0].name);
       setContent(dataSourceTopic.data[0].content);  
-      setDataForm(dataSourceTopic.data[0].form); 
+      // setDataForm(dataSourceTopic.data[0].form); 
+      parseFormAnswer(dataSourceTopic.data[0].form);
     }
   }, [dataSourceTopic]);
+
+  const parseFormAnswer=(formData:any)=>{
+    const form=formData;
+    const answer=dataSourceTopic.data[0].answer;
+    const resMerge=form.map((item:any)=>{
+        return {
+          ...item,
+          value:answer[item.id]
+        }
+    });
+    console.log('ressMerge',resMerge);
+    setDataForm(resMerge);
+  }
 
   const getBahan = async (values: any) => {
     let url = `/api/report/new-report/instructions`;
@@ -113,8 +127,9 @@ export const DisclosurePage = () => {
     const jsonData = await rawResponse.json();
     if (jsonData.success) {
       console.log('jsonDataForm ', jsonData)
-      
-      setDataForm(jsonData.data);
+
+      // setDataForm(jsonData.data);
+      parseFormAnswer(jsonData.data);
     
     }
   }
@@ -428,7 +443,7 @@ export const DisclosurePage = () => {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({content: content,form:dataForm }),
+        body: JSON.stringify({content: content,form:dataForm,answer:answer }),
       });
       const result=await res.json();
       if(result['success']){
