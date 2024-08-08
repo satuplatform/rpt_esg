@@ -467,7 +467,7 @@ export const DisclosurePage = () => {
     let name;
     let code;
     let type;
-    let lang;
+    let lang = 'id';
     let rname = '';
     for (let i = 0; i < dataSourceTree.data.length; i++) {
       for (let x = 0; x < dataSourceTree.data[i].children.length; x++) {
