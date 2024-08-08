@@ -28,7 +28,7 @@ export interface ITabData {
   type: string;
   tipe_data: string;
   id: string;
-  value:string;
+  value: string;
 }
 interface TabDataProps {
   dataForm: Array<ITabData>;
@@ -63,7 +63,7 @@ export const TabData = ({ dataForm, setAnswer }: TabDataProps) => {
       key: 'answer',
       dataIndex: 'answer',
       render: (text, record) => {
-        console.log('texttttttttt',text, record['value']);
+        console.log('texttttttttt', text, record['value']);
 
         if (record.tipe_data === 'text') {
           // return <Input defaultValue={text as string=='-' ? undefined :text as string}  />;
@@ -74,114 +74,113 @@ export const TabData = ({ dataForm, setAnswer }: TabDataProps) => {
               rules={[
                 { required: true, message: `${record.label} is required` },
               ]}
-              initialValue={record.value} 
+              initialValue={record.value}
             >
-              <Input  />
+              <Input />
             </Form.Item>
           );
         } else if (record.tipe_data === 'year') {
           return (
             <Form.Item
-            name={['data', record.nama_field, 'value']}
+              name={['data', record.nama_field, 'value']}
               rules={[
                 { required: true, message: `${record.label} is required` },
               ]}
               initialValue={record.value ? dayjs(record.value) : null}
             >
-              <DatePicker picker="year"  />
+              <DatePicker picker="year" />
             </Form.Item>
           );
           // return <DatePicker picker="year" defaultValue={text !='-' ? dayjs(text as string, 'YYYY') : undefined} />;
         } else if (record.tipe_data === 'date') {
           return (
             <Form.Item
-            name={['data', record.nama_field, 'value']}
-            rules={[
-              { required: true, message: `${record.label} is required` },
-            ]}
-            initialValue={record.value ? dayjs(record.value) : null}
-          >
-            <DatePicker
-             
-            />
-          </Form.Item>
-            
+              name={['data', record.nama_field, 'value']}
+              rules={[
+                { required: true, message: `${record.label} is required` },
+              ]}
+              initialValue={record.value ? dayjs(record.value) : null}
+            >
+              <DatePicker />
+            </Form.Item>
           );
-        } else if (record.tipe_data === 'number') {
-          <Form.Item
-          name={['data', record.nama_field, 'value']}
-          rules={[
-            { required: true, message: `${record.label} is required` },
-          ]}
-          initialValue={record.value} 
-        >
-          <InputNumber defaultValue={text ? Number(text) : undefined} />
-        </Form.Item>
+        } else if (record.tipe_data == 'number') {
+          
+         return( <Form.Item
+            name={['data', record.nama_field, 'value']}
+            rules={[{ required: true, message: `${record.label} is required` }]}
+            initialValue={record.value}
+          >
+            <InputNumber />
+          </Form.Item>
+         );
         }
         return text;
       },
     },
   ];
 
-  console.log('answerrrrrrrrrrrr',dataSource);
+  console.log('answerrrrrrrrrrrr', dataSource);
 
   return (
     <Form>
-    <EditableProTable<ITabData>
-      headerTitle="Data Index"
-      columns={columns}
-      rowKey="nama_field"
-      scroll={{
-        x: 460,
-        y: 430,
-      }}
-      value={dataSource}
-      onChange={setDataSource}
-      toolBarRender={() => {
-        return [
-          //   <Button
-          //     type="primary"
-          //     key="save"
-          //     onClick={() => {
-          //       console.log(dataSource);
-          //     }}
-          //   >
-          //     Add
-          //   </Button>,
-        ];
-      }}
-      recordCreatorProps={false}
-      editable={{
-        type: 'multiple',
-        editableKeys,
-        actionRender: (row, config, defaultDoms) => {
-          console.log(row);
-          console.log(config);
-          return [defaultDoms.delete];
-        },
-        onValuesChange: ( record:any, recordList) => {
-          console.log('record',record);
-          console.log('recordList',recordList);
-          
-          const newData = recordList.map((item:any) => {
-              const val=record[item.nama_field]?.['value'];
-              console.log('recorddddddddddddddddd',record[item.nama_field]?.['value']);
+      <EditableProTable<ITabData>
+        headerTitle="Data Index"
+        columns={columns}
+        rowKey="nama_field"
+        scroll={{
+          x: 460,
+          y: 430,
+        }}
+        value={dataSource}
+        onChange={setDataSource}
+        toolBarRender={() => {
+          return [
+            //   <Button
+            //     type="primary"
+            //     key="save"
+            //     onClick={() => {
+            //       console.log(dataSource);
+            //     }}
+            //   >
+            //     Add
+            //   </Button>,
+          ];
+        }}
+        recordCreatorProps={false}
+        editable={{
+          type: 'multiple',
+          editableKeys,
+          actionRender: (row, config, defaultDoms) => {
+            console.log(row);
+            console.log(config);
+            return [defaultDoms.delete];
+          },
+          onValuesChange: (record: any, recordList) => {
+            console.log('record', record);
+            console.log('recordList', recordList);
+
+            const newData = recordList.map((item: any) => {
+              const val = record[item.nama_field]?.['value'];
+              console.log(
+                'recorddddddddddddddddd',
+                record[item.nama_field]?.['value']
+              );
               return {
                 ...item,
-                value:val
-              }
-          });
+                value: val,
+              };
+            });
 
-          console.log('newData',newData);
-  
-          setDataSource(newData);
-          setAnswer(newData );
-        },
-      
+            console.log('newData', newData);
 
-        onChange: setEditableRowKeys,
-      }}
-    />
+            setDataSource(newData);
+            setAnswer(newData);
+          },
+
+          onChange: setEditableRowKeys,
+        }}
+      />
     </Form>
   );
 };

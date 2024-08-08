@@ -15,9 +15,7 @@ import { useParams } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import Icon from '@mdi/react';
 import { mdiDelete } from '@mdi/js';
-import {
-  CarryOutOutlined,
-} from '@ant-design/icons';
+import { CarryOutOutlined } from '@ant-design/icons';
 import { Tree } from 'antd';
 import type { TreeDataNode } from 'antd';
 import { useEditorContext } from '@/context/tiptap_context';
@@ -36,9 +34,9 @@ const useStyles = createStyles(({ /*token,*/ css }) => ({
 }));
 
 interface IDataDisclosure {
-  disclosureId: string
-  name: string
-  code: string
+  disclosureId: string;
+  name: string;
+  code: string;
 }
 
 export const DisclosurePage = () => {
@@ -54,8 +52,8 @@ export const DisclosurePage = () => {
 
   const [prompt, setPrompt] = useState('');
   const [instruction, setInstruction] = useState('');
-  const editor=useEditorContext();
-  const [answer, setAnswer] = useState<any[]>([]); 
+  const editor = useEditorContext();
+  const [answer, setAnswer] = useState<any[]>([]);
 
   const { data: dataSourceTree } = useQuery({
     queryKey: ['new-report-disclosures-tree'],
@@ -71,28 +69,32 @@ export const DisclosurePage = () => {
   });
   console.log('topicId ', topicId);
   console.log('dataSourceTopic ', dataSourceTopic);
- 
+
   useEffect(() => {
     if (dataSourceTopic) {
       setTopic(dataSourceTopic.data[0].name);
-      setContent(dataSourceTopic.data[0].content);  
-      // setDataForm(dataSourceTopic.data[0].form); 
+      setContent(dataSourceTopic.data[0].content);
+      // setDataForm(dataSourceTopic.data[0].form);
       parseFormAnswer(dataSourceTopic.data[0].form);
     }
   }, [dataSourceTopic]);
 
-  const parseFormAnswer=(formData:any)=>{
-    const form=formData;
-    const answer=dataSourceTopic.data[0].answer;
-    const resMerge=form.map((item:any)=>{
+  const parseFormAnswer = (formData: any) => {
+    const form = formData;
+    const answer = dataSourceTopic?.data[0]?.answer??{};
+    let resMerge = formData;
+   
+      resMerge = form.map((item: any) => {
         return {
           ...item,
-          value:answer[item.id]
-        }
-    });
-    console.log('ressMerge',resMerge);
+          value: answer[item.id],
+        };
+      });
+   
+
+    console.log('ressMerge', resMerge);
     setDataForm(resMerge);
-  }
+  };
 
   const getBahan = async (values: any) => {
     let url = `/api/report/new-report/instructions`;
@@ -106,13 +108,12 @@ export const DisclosurePage = () => {
     });
     const jsonData = await rawResponse.json();
     if (jsonData.success) {
-      console.log('jsonData ', jsonData)
-      setPrompt(jsonData.data.prompt)
-      setInstruction(jsonData.data.instruction)
-      setListRequirements(jsonData.data.requirements)
+      console.log('jsonData ', jsonData);
+      setPrompt(jsonData.data.prompt);
+      setInstruction(jsonData.data.instruction);
+      setListRequirements(jsonData.data.requirements);
     }
-  }
-
+  };
 
   const getDataByIndexForm = async (values: any) => {
     let url = `/api/report/new-report/data/by_index_form`;
@@ -126,13 +127,12 @@ export const DisclosurePage = () => {
     });
     const jsonData = await rawResponse.json();
     if (jsonData.success) {
-      console.log('jsonDataForm ', jsonData)
+      console.log('jsonDataForm ', jsonData);
 
       // setDataForm(jsonData.data);
       parseFormAnswer(jsonData.data);
-    
     }
-  }
+  };
 
   const getDisclosureReport = async () => {
     const url = `/api/report/new-report/disclosures?topicId=${topicId}&reportId=${reportId}`;
@@ -144,22 +144,23 @@ export const DisclosurePage = () => {
       setDataDisclosures(jsonData.data);
 
       let req = [];
-      for(let i=0;i<jsonData.data.length;i++){
+      for (let i = 0; i < jsonData.data.length; i++) {
         req.push({
-          "type": jsonData.data[i].type.toLowerCase(),
-          "lang": 'id', //jsonData.data.[i].lang,
-          "code": jsonData.data[i].type.toLowerCase()+'-'+jsonData.data[i].code,
-        })
+          type: jsonData.data[i].type.toLowerCase(),
+          lang: 'id', //jsonData.data.[i].lang,
+          code:
+            jsonData.data[i].type.toLowerCase() + '-' + jsonData.data[i].code,
+        });
       }
-      getBahan(req); 
-     // temporary krn lang id ga ada nanti hapus pakai yg dr variable req aja
-     let dt=[];
-      for(let i=0;i<jsonData.data.length;i++){
+      getBahan(req);
+      // temporary krn lang id ga ada nanti hapus pakai yg dr variable req aja
+      let dt = [];
+      for (let i = 0; i < jsonData.data.length; i++) {
         dt.push({
-          "type": jsonData.data[i].type.toLowerCase(),
-          "lang": 'en', 
-          "code": jsonData.data[i].code,
-        })
+          type: jsonData.data[i].type.toLowerCase(),
+          lang: 'en',
+          code: jsonData.data[i].code,
+        });
       }
       getDataByIndexForm(dt);
     }
@@ -183,7 +184,7 @@ export const DisclosurePage = () => {
       lang: lang,
       rname: rname,
     };
-    console.log('values ', values)
+    console.log('values ', values);
     const url = `/api/report/new-report/disclosures/insert`;
     const rawResponse = await fetch(url, {
       method: 'POST',
@@ -216,7 +217,7 @@ export const DisclosurePage = () => {
           let chd = dataSourceTree.data[x].children;
           let chdc = [];
           for (let xx = 0; xx < chd.length; xx++) {
-            if(chd[xx].code != 'cover1'){
+            if (chd[xx].code != 'cover1') {
               chdc.push({
                 title: (
                   <Draggable id={chd[xx]._id}>
@@ -229,7 +230,6 @@ export const DisclosurePage = () => {
                 key: chd[xx]._id,
               });
             }
-            
           }
           if (dataSourceTree.data[x].type == arrType[i]) {
             children.push({
@@ -285,7 +285,7 @@ export const DisclosurePage = () => {
       let ct = jsonData.data.candidates[0].content.parts[0].text;
       let cform = jsonData.formInput;
       setDataForm(cform);
-      console.log('dataForm 1 ', cform)
+      console.log('dataForm 1 ', cform);
       const html = await marked.parse(ct);
 
       console.log(html);
@@ -297,7 +297,7 @@ export const DisclosurePage = () => {
   };
 
   const onConfirmDiscDelete = async (dt: any) => {
-    console.log(dt)
+    console.log(dt);
     //return;
     const url = `/api/report/new-report/disclosures/delete?id=${dt._id}`;
     const rawResponse = await fetch(url);
@@ -306,7 +306,7 @@ export const DisclosurePage = () => {
       message.success('Delete Sukses');
       getDisclosureReport();
     }
-  }
+  };
 
   const items: TabsProps['items'] = [
     {
@@ -345,19 +345,23 @@ export const DisclosurePage = () => {
                   <Button
                     onClick={() => {
                       onFinish({
-                        instruction:instruction,
-                        prompt:prompt,
-                        reportId, 
-                        topicId
-                      })
+                        instruction: instruction,
+                        prompt: prompt,
+                        reportId,
+                        topicId,
+                      });
                     }}
                   >
                     Generate
                   </Button>
-                  <Button onClick={() => {
-                    let md = editor?.storage.markdown.getMarkdown();
-                    console.log('md ', md)
-                  }}>Update</Button>
+                  <Button
+                    onClick={() => {
+                      let md = editor?.storage.markdown.getMarkdown();
+                      console.log('md ', md);
+                    }}
+                  >
+                    Update
+                  </Button>
                 </div>
               </div>
             </div>
@@ -378,7 +382,11 @@ export const DisclosurePage = () => {
                   className={cx(styles.box)}
                 >
                   <Tree
-                    style={{overflowX: 'clip', height: '62vh', overflowY: 'scroll'}}
+                    style={{
+                      overflowX: 'clip',
+                      height: '62vh',
+                      overflowY: 'scroll',
+                    }}
                     showLine={{ showLeafIcon: true }}
                     showIcon={false}
                     defaultExpandedKeys={['0-0-0']}
@@ -399,17 +407,24 @@ export const DisclosurePage = () => {
                     <List
                       key="_id"
                       size="small"
-                      style={{padding: 0, overflowY: 'auto', height: '60vh'}}
+                      style={{ padding: 0, overflowY: 'auto', height: '60vh' }}
                       header={<div>List Disclosure</div>}
                       bordered
                       dataSource={dataDisclosures}
                       renderItem={(item) => (
                         <List.Item
                           actions={[
-                            <a onClick={() => onConfirmDiscDelete(item)} key="list-loadmore-edit">
-                              <Icon style={{color: 'red'}} path={mdiDelete} size={0.8} />
-                            </a>
-                        ]}
+                            <a
+                              onClick={() => onConfirmDiscDelete(item)}
+                              key="list-loadmore-edit"
+                            >
+                              <Icon
+                                style={{ color: 'red' }}
+                                path={mdiDelete}
+                                size={0.8}
+                              />
+                            </a>,
+                          ]}
                         >
                           {item.code + ' ' + item.name}
                         </List.Item>
@@ -426,39 +441,48 @@ export const DisclosurePage = () => {
     {
       key: '2',
       label: 'Requirement',
-      children: <TabRequirement listRequirements={listRequirements}/>,
+      children: <TabRequirement listRequirements={listRequirements} />,
     },
     {
       key: '3',
       label: 'Data',
-      children: <TabData dataForm={dataForm} setAnswer={setAnswer}/>,
+      children: <TabData dataForm={dataForm} setAnswer={setAnswer} />,
     },
   ];
 
-  const operations = <Button type="primary" onClick={ async ()=>{
-    const content = editor?.getHTML();
-    
-    if (content) {
-     const res= await fetch(`/api/report/new-report/topic/${topicId}`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({content: content,form:dataForm,answer:answer }),
-      });
-      const result=await res.json();
-      if(result['success']){
-        message.success('Save Success');
-      }else{
-        message.error('Save Failed');
-      }
-    }
+  const operations = (
+    <Button
+      type="primary"
+      onClick={async () => {
+        const content = editor?.getHTML();
 
-  }}>Save</Button>;
+        if (content) {
+          const res = await fetch(`/api/report/new-report/topic/${topicId}`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              content: content,
+              form: dataForm,
+              answer: answer,
+            }),
+          });
+          const result = await res.json();
+          if (result['success']) {
+            message.success('Save Success');
+          } else {
+            message.error('Save Failed');
+          }
+        }
+      }}
+    >
+      Save
+    </Button>
+  );
 
   return (
     <div>
-     
       <Spin spinning={spinning} fullscreen />
       <div style={{ marginBottom: '4px' }}>topik : {topic}</div>
       <Splitter
@@ -493,21 +517,20 @@ export const DisclosurePage = () => {
         </div>
       </Splitter>
     </div>
-
   );
 
   function handleDragEnd(event: any) {
     const { active, over } = event;
-    
-    if(over == null){
+
+    if (over == null) {
       return;
     }
 
-    let idx = dataDisclosures.findIndex(d => d.disclosureId == active.id)
-    if(idx > -1){
+    let idx = dataDisclosures.findIndex((d) => d.disclosureId == active.id);
+    if (idx > -1) {
       return;
     }
-    
+
     //return;
     let id;
     let name;
@@ -522,8 +545,11 @@ export const DisclosurePage = () => {
           name = dataSourceTree.data[i].children[x].name;
           code = dataSourceTree.data[i].children[x].code;
           type = dataSourceTree.data[i].children[x].type;
-          lang = 'id';//dataSourceTree.data[i].children[x].lang;
-          rname = dataSourceTree.data[i].children[x].type+' '+dataSourceTree.data[i].children[x].code;
+          lang = 'id'; //dataSourceTree.data[i].children[x].lang;
+          rname =
+            dataSourceTree.data[i].children[x].type +
+            ' ' +
+            dataSourceTree.data[i].children[x].code;
           // console.log('handleDragEnd id ', active.id);
           // console.log(
           //   'handleDragEnd name ',
