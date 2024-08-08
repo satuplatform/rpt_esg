@@ -83,18 +83,24 @@ export const DisclosurePage = () => {
     const form = formData;
     const answer = dataSourceTopic?.data[0]?.answer??{};
     let resMerge = formData;
+
+    
    
-      resMerge = form.map((item: any) => {
-        return {
-          ...item,
-          value: answer[item.id],
-        };
-      });
+    resMerge = form.map((item: any) => {
+      console.log('answerrrrparse',answer[item.id]);
+      return {
+        ...item,
+        value: answer[item.id],
+      };
+    });
    
 
     console.log('ressMerge', resMerge);
     setDataForm(resMerge);
   };
+
+
+  
 
   const getBahan = async (values: any) => {
     let url = `/api/report/new-report/instructions`;
