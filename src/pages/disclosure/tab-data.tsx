@@ -108,7 +108,7 @@ export const TabData = ({ dataForm, setAnswer }: TabDataProps) => {
             
           );
         } else if (record.tipe_data === 'number') {
-          <Form.Item
+          return <Form.Item
           name={['data', record.nama_field, 'value']}
           rules={[
             { required: true, message: `${record.label} is required` },

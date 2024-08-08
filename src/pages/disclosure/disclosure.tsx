@@ -81,18 +81,22 @@ export const DisclosurePage = () => {
     }
   }, [dataSourceTopic]);
 
-  const parseFormAnswer=(formData:any)=>{
-    const form=formData;
-    const answer=dataSourceTopic.data[0].answer;
-    const resMerge=form.map((item:any)=>{
+  const parseFormAnswer = (formData: any) => {
+    const form = formData;
+    const answer = dataSourceTopic?.data[0]?.answer??{};
+    let resMerge = formData;
+   
+      resMerge = form.map((item: any) => {
         return {
           ...item,
-          value:answer[item.id]
-        }
-    });
-    console.log('ressMerge',resMerge);
+          value: answer[item.id],
+        };
+      });
+   
+
+    console.log('ressMerge', resMerge);
     setDataForm(resMerge);
-  }
+  };
 
   const getBahan = async (values: any) => {
     let url = `/api/report/new-report/instructions`;
