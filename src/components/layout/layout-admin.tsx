@@ -55,6 +55,7 @@ const masterRoute = {
     {
       name: 'New Report',
       icon: <Icon path={mdiPlusCircleOutline} size={0.7} />,
+      id: 100,
       path: '/',
       routes: []
     },
@@ -62,6 +63,7 @@ const masterRoute = {
       name: 'Report',
       icon: <Icon path={mdiBasket} size={0.7} />,
       path: '/report',
+      id: 101,
       routes: [
       ],
     },
@@ -134,29 +136,43 @@ export const LayoutAdmin = () => {
               for (let i = 0; i < dataReport.data.length; i++) {
                 let idx = rep.findIndex((d) => d.name == dataReport.data[i].name);
                 if (idx < 0) {
+                  let random = Math.random() * (99999 - 10000) + 10000;
+                  let random2 = Math.random() * (99999 - 10000) + 10000;
+                  let random3 = Math.random() * (99999 - 10000) + 10000;
+                  let random4 = Math.random() * (99999 - 10000) + 10000;
+                  let random5 = Math.random() * (99999 - 10000) + 10000;
                   rep.push({
                     name: dataReport.data[i].name,
                     path: '/report/detail',
-                    key:'ddd'+i,
+                    key: 'ddd'+random,
+                    id: random,
                     routes: [
                       {
                         path: `/report/topics/${dataReport.data[i]._id}`,
                         name: 'Topic',
+                        id: random2,
+                        key: random2,
                         hideChildrenInMenu: true,
                         routes: [
                           {
-                            path: '/report/disclosures',
-                            name: 'Disclosures',
+                            path: `/report/disclosures/topicid/${dataReport.data[i]._id}`,
+                            name: 'Disclosures Report',
+                            id: random5,
+                            key: random5,
                           },
                         ],
                       },
                       {
                         path: `/report/preview/${dataReport.data[i]._id}`,
                         name: 'Preview',
+                        id: random3,
+                        key: random3,
                       },
                       {
                         path: `/report/data/${dataReport.data[i]._id}`,
                         name: 'Data',
+                        id: random4,
+                        key: random4,
                       },
                     ],
                   });
