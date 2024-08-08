@@ -60,7 +60,7 @@ export const PreviewPage = () => {
     getData();
 
     return () => {};
-  }, []);
+  }, [reportId]);
 
   
   const getImage = (src:any): Promise<ArrayBuffer> => {
