@@ -138,6 +138,7 @@ export const DisclosurePage = () => {
       lang: lang,
       rname: rname,
     };
+    console.log('values ', values)
     const url = `/api/report/new-report/disclosures/insert`;
     const rawResponse = await fetch(url, {
       method: 'POST',
@@ -478,11 +479,11 @@ export const DisclosurePage = () => {
           type = dataSourceTree.data[i].children[x].type;
           lang = 'id';//dataSourceTree.data[i].children[x].lang;
           rname = dataSourceTree.data[i].children[x].type+' '+dataSourceTree.data[i].children[x].code;
-          console.log('handleDragEnd id ', active.id);
-          console.log(
-            'handleDragEnd name ',
-            dataSourceTree.data[i].children[x]
-          );
+          // console.log('handleDragEnd id ', active.id);
+          // console.log(
+          //   'handleDragEnd name ',
+          //   dataSourceTree.data[i].children[x]
+          // );
         }
       }
     }
