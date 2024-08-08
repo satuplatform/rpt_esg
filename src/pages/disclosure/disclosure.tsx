@@ -181,6 +181,8 @@ export const DisclosurePage = () => {
     if (jsonData.success) {
       message.success('Insert Sukses');
       getDisclosureReport();
+    } else {
+      message.error('Insert Failed');
     }
   };
 
@@ -280,7 +282,8 @@ export const DisclosurePage = () => {
 
   const onConfirmDiscDelete = async (dt: any) => {
     console.log(dt)
-    const url = `/api/report/new-report/disclosures/delete?${dt._id}`;
+    //return;
+    const url = `/api/report/new-report/disclosures/delete?id=${dt._id}`;
     const rawResponse = await fetch(url);
     const jsonData = await rawResponse.json();
     if (jsonData.success) {
@@ -503,7 +506,7 @@ export const DisclosurePage = () => {
           name = dataSourceTree.data[i].children[x].name;
           code = dataSourceTree.data[i].children[x].code;
           type = dataSourceTree.data[i].children[x].type;
-          lang = dataSourceTree.data[i].children[x].lang;
+          lang = 'id';//dataSourceTree.data[i].children[x].lang;
           rname = dataSourceTree.data[i].children[x].type+' '+dataSourceTree.data[i].children[x].code;
           console.log('handleDragEnd id ', active.id);
           console.log(
