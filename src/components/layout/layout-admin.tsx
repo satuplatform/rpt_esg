@@ -137,6 +137,7 @@ export const LayoutAdmin = () => {
                   rep.push({
                     name: dataReport.data[i].name,
                     path: '/report/detail',
+                    key:'ddd'+i,
                     routes: [
                       {
                         path: `/report/topics/${dataReport.data[i]._id}`,

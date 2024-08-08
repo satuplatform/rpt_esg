@@ -55,6 +55,7 @@ export const DisclosurePage = () => {
   const [prompt, setPrompt] = useState('');
   const [instruction, setInstruction] = useState('');
   const editor=useEditorContext();
+  const [answer, setAnswer] = useState<any[]>([]); 
 
   const { data: dataSourceTree } = useQuery({
     queryKey: ['new-report-disclosures-tree'],
@@ -70,12 +71,12 @@ export const DisclosurePage = () => {
   });
   console.log('topicId ', topicId);
   console.log('dataSourceTopic ', dataSourceTopic);
-
+ 
   useEffect(() => {
     if (dataSourceTopic) {
       setTopic(dataSourceTopic.data[0].name);
-      setContent(dataSourceTopic.data[0].content);
-      setDataForm(dataSourceTopic.data[0].form);
+      setContent(dataSourceTopic.data[0].content);  
+      setDataForm(dataSourceTopic.data[0].form); 
     }
   }, [dataSourceTopic]);
 
@@ -98,6 +99,26 @@ export const DisclosurePage = () => {
     }
   }
 
+
+  const getDataByIndexForm = async (values: any) => {
+    let url = `/api/report/new-report/data/by_index_form`;
+    const rawResponse = await fetch(url, {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(values),
+    });
+    const jsonData = await rawResponse.json();
+    if (jsonData.success) {
+      console.log('jsonDataForm ', jsonData)
+      
+      setDataForm(jsonData.data);
+    
+    }
+  }
+
   const getDisclosureReport = async () => {
     const url = `/api/report/new-report/disclosures?topicId=${topicId}&reportId=${reportId}`;
     const response = await fetch(url);
@@ -115,8 +136,17 @@ export const DisclosurePage = () => {
           "code": jsonData.data[i].type.toLowerCase()+'-'+jsonData.data[i].code,
         })
       }
-      getBahan(req);
-      console.log('request data ', req);
+      getBahan(req); 
+     // temporary krn lang id ga ada nanti hapus pakai yg dr variable req aja
+     let dt=[];
+      for(let i=0;i<jsonData.data.length;i++){
+        dt.push({
+          "type": jsonData.data[i].type.toLowerCase(),
+          "lang": 'en', 
+          "code": jsonData.data[i].code,
+        })
+      }
+      getDataByIndexForm(dt);
     }
   };
 
@@ -382,7 +412,7 @@ export const DisclosurePage = () => {
     {
       key: '3',
       label: 'Data',
-      children: <TabData dataForm={dataForm}/>,
+      children: <TabData dataForm={dataForm} setAnswer={setAnswer}/>,
     },
   ];
 

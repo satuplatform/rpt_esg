@@ -1,8 +1,8 @@
 import type { ProColumns } from '@ant-design/pro-components';
-import {
-  EditableProTable,
-} from '@ant-design/pro-components';
-import React, { useEffect, useState } from 'react';
+import { EditableProTable } from '@ant-design/pro-components';
+import { Button, DatePicker, Form, Input, InputNumber, message } from 'antd';
+import React, { Dispatch, SetStateAction, useEffect, useState } from 'react';
+import dayjs from 'dayjs';
 
 // type DataSourceType = {
 //   id: React.Key;
@@ -22,26 +22,32 @@ import React, { useEffect, useState } from 'react';
 const defaultData: ITabData[] = [];
 
 export interface ITabData {
-  field: string,
-  nama_field: string,
-  label: string,
-  type: string
+  field: string;
+  nama_field: string;
+  label: string;
+  type: string;
+  tipe_data: string;
+  id: string;
+}
+interface TabDataProps {
+  dataForm: Array<ITabData>;
+  setAnswer: Dispatch<SetStateAction<any[]>>;
 }
 
-export const TabData = ({dataForm}:{dataForm:Array<ITabData>}) => {
+export const TabData = ({ dataForm, setAnswer }: TabDataProps) => {
   const [editableKeys, setEditableRowKeys] = useState<React.Key[]>(() =>
     defaultData.map((item) => item.nama_field)
   );
   const [dataSource, setDataSource] = useState<readonly ITabData[]>(
     () => defaultData
   );
-  console.log('dataForm 2 ', dataForm)
+  console.log('dataForm 2 ', dataForm);
 
   useEffect(() => {
-    if(dataForm){
-      setDataSource(dataForm)
+    if (dataForm) {
+      setDataSource(dataForm);
     }
-  }, [dataForm])
+  }, [dataForm]);
 
   const columns: ProColumns<ITabData>[] = [
     {
@@ -55,31 +61,48 @@ export const TabData = ({dataForm}:{dataForm:Array<ITabData>}) => {
       title: 'Value',
       key: 'value',
       dataIndex: 'value',
-      formItemProps: {
-        rules: [
-          {
-            required: true,
-            whitespace: true,
-            message: '此项是必填项',
-          },
-          {
-            message: '必须包含数字',
-            pattern: /[0-9]/,
-          },
-          {
-            max: 16,
-            whitespace: true,
-            message: '最长为 16 位',
-          },
-          {
-            min: 6,
-            whitespace: true,
-            message: '最小为 6 位',
-          },
-        ],
+      render: (text, record) => {
+        console.log('texttttttttt', text);
+
+        if (record.tipe_data === 'text') {
+          // return <Input defaultValue={text as string=='-' ? undefined :text as string}  />;
+          return (
+            <Form.Item
+              name={['data', record.nama_field, 'value']}
+              rules={[
+                { required: true, message: `${record.label} is required` },
+              ]}
+            >
+              <Input />
+            </Form.Item>
+          );
+        } else if (record.tipe_data === 'year') {
+          return (
+            <Form.Item
+              name={['data', record.nama_field, 'value']}
+              rules={[
+                { required: true, message: `${record.label} is required` },
+              ]}
+            >
+              <DatePicker picker="year" />
+            </Form.Item>
+          );
+          // return <DatePicker picker="year" defaultValue={text !='-' ? dayjs(text as string, 'YYYY') : undefined} />;
+        } else if (record.tipe_data === 'date') {
+          return (
+            <DatePicker
+              defaultValue={text != '-' ? dayjs(text as string) : undefined}
+            />
+          );
+        } else if (record.tipe_data === 'number') {
+          return <InputNumber defaultValue={text ? Number(text) : undefined} />;
+        }
+        return text;
       },
     },
   ];
+
+  console.log('answerrrrrrrrrrrr',dataSource);
 
   return (
     <EditableProTable<ITabData>
@@ -94,15 +117,15 @@ export const TabData = ({dataForm}:{dataForm:Array<ITabData>}) => {
       onChange={setDataSource}
       toolBarRender={() => {
         return [
-          // <Button
-          //   type="primary"
-          //   key="save"
-          //   onClick={() => {
-          //     console.log(dataSource);
-          //   }}
-          // >
-          //   Add
-          // </Button>,
+          //   <Button
+          //     type="primary"
+          //     key="save"
+          //     onClick={() => {
+          //       console.log(dataSource);
+          //     }}
+          //   >
+          //     Add
+          //   </Button>,
         ];
       }}
       recordCreatorProps={false}
@@ -110,14 +133,30 @@ export const TabData = ({dataForm}:{dataForm:Array<ITabData>}) => {
         type: 'multiple',
         editableKeys,
         actionRender: (row, config, defaultDoms) => {
-          console.log(row)
-          console.log(config)
+          console.log(row);
+          console.log(config);
           return [defaultDoms.delete];
         },
-        onValuesChange: (record, recordList) => {
-          console.log(record)
-          setDataSource(recordList);
+        onValuesChange: ( record:any, recordList) => {
+          console.log('record',record);
+          console.log('recordList',recordList);
+          
+          const newData = recordList.map((item:any) => {
+              const val=record[item.nama_field]?.['value'];
+              console.log('recorddddddddddddddddd',record[item.nama_field]?.['value']);
+              return {
+                ...item,
+                value:val
+              }
+          });
+
+          console.log('newData',newData);
+  
+          setDataSource(newData);
+          setAnswer(newData );
         },
+      
+
         onChange: setEditableRowKeys,
       }}
     />
