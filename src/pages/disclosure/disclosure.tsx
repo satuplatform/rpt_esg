@@ -72,6 +72,8 @@ export const DisclosurePage = () => {
 
   useEffect(() => {
     if (dataSourceTopic) {
+      
+      console.log('useeffect 2');
       setTopic(dataSourceTopic.data[0].name);
       setContent(dataSourceTopic.data[0].content);
       // setDataForm(dataSourceTopic.data[0].form);
@@ -87,13 +89,16 @@ export const DisclosurePage = () => {
 
     
    
-    resMerge = form?.map((item: any) => {
-      console.log('answerrrrparse',answer, answer[item.id],item.id);
-      return {
-        ...item,
-        value: answer[item.id],
-      };
-    });
+    // if(answer?.length>0){
+      resMerge = form?.map((item: any) => {
+        // console.log('answerrrrparse',answer, answer[item.id],item.id);
+        return {
+          ...item,
+          value: answer?.[item.id] !== undefined ? answer[item.id] : '',
+        };
+      });
+    // }
+    
    
 
     console.log('ressMerge', resMerge);
@@ -171,7 +176,8 @@ export const DisclosurePage = () => {
           code: jsonData.data[i].code,
         });
       }
-      getDataByIndexForm(dt);
+      // getDataByIndexForm(dt);
+      return dt;
     }
   };
 
@@ -206,7 +212,8 @@ export const DisclosurePage = () => {
     const jsonData = await rawResponse.json();
     if (jsonData.success) {
       message.success('Insert Sukses');
-      getDisclosureReport();
+     const res= await getDisclosureReport();
+     getDataByIndexForm(res);
     } else {
       message.error('Insert Failed');
     }
@@ -214,6 +221,8 @@ export const DisclosurePage = () => {
 
   useEffect(() => {
     if (dataSourceTree) {
+      
+      console.log('useeffect 3');
       let type = new Set();
       for (let i = 0; i < dataSourceTree.data.length; i++) {
         type.add(dataSourceTree.data[i].type);
@@ -263,6 +272,8 @@ export const DisclosurePage = () => {
 
   useEffect(() => {
     if (reportId && topicId) {
+      
+      console.log('useeffect 1');
       getDisclosureReport();
     }
   }, [reportId, topicId]);
