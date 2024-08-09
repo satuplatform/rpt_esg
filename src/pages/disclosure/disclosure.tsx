@@ -90,16 +90,31 @@ export const DisclosurePage = () => {
     let resMerge = formData;
 
     // if(answer?.length>0){
-    resMerge = form?.map((item: any) => {
-      // console.log('answerrrrparse',answer, answer[item.id],item.id);
-      return {
-        ...item,
-        value:
-          answer?.[item.id]['value'] !== undefined
-            ? answer[item.id]['value']
-            : '',
-      };
-    });
+    // resMerge = form?.map((item: any) => {
+    //   // console.log('answerrrrparse',answer, answer[item.id],item.id);
+    //   return {
+    //     ...item,
+    //     value:
+    //       answer?.[item.id]['value'] !== undefined
+    //         ? answer[item.id]['value']
+    //         : '',
+    //   };
+    // });
+      resMerge = form?.map((item: any) => {
+        //console.log('answerrrrparse',answer, answer[item.id],item.id);
+        if(item.id){
+          return {
+            ...item,
+            value: answer?.[item.id]['value'] !== undefined ? answer[item.id]['value'] : '',
+          };
+        }
+
+        return {
+          ...item,
+          value: '',
+        };
+        
+      });
     // }
 
     console.log('ressMerge', resMerge);
