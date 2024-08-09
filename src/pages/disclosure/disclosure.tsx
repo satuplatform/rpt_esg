@@ -72,40 +72,39 @@ export const DisclosurePage = () => {
 
   useEffect(() => {
     if (dataSourceTopic) {
-      
       console.log('useeffect 2');
       setTopic(dataSourceTopic.data[0].name);
       setContent(dataSourceTopic.data[0].content);
       // setDataForm(dataSourceTopic.data[0].form);
-      parseFormAnswer(dataSourceTopic.data[0].form,dataSourceTopic?.data[0]?.answer);
+      parseFormAnswer(
+        dataSourceTopic.data[0].form,
+        dataSourceTopic?.data[0]?.answer
+      );
     }
   }, [dataSourceTopic]);
 
-  const parseFormAnswer = (formData: any,answer:any) => {
+  const parseFormAnswer = (formData: any, answer: any) => {
     const form = formData;
-    
+
     // let answer = dataSourceTopic?.data[0]?.answer??{};
     let resMerge = formData;
 
-    
-   
     // if(answer?.length>0){
-      resMerge = form?.map((item: any) => {
-        // console.log('answerrrrparse',answer, answer[item.id],item.id);
-        return {
-          ...item,
-          value: answer?.[item.id]['value'] !== undefined ? answer[item.id]['value'] : '',
-        };
-      });
+    resMerge = form?.map((item: any) => {
+      // console.log('answerrrrparse',answer, answer[item.id],item.id);
+      return {
+        ...item,
+        value:
+          answer?.[item.id]['value'] !== undefined
+            ? answer[item.id]['value']
+            : '',
+      };
+    });
     // }
-    
-   
 
     console.log('ressMerge', resMerge);
     setDataForm(resMerge);
   };
-
-
 
   const getBahan = async (values: any) => {
     let url = `/api/report/new-report/instructions`;
@@ -141,14 +140,13 @@ export const DisclosurePage = () => {
       console.log('jsonDataForm ', jsonData);
 
       // setDataForm(jsonData.data);
-        const answer=dataSourceTopic?.data[0]?.answer;
-        parseFormAnswer(jsonData.data,answer);
-      
-        return jsonData?.data;
-    }else{
+      const answer = dataSourceTopic?.data[0]?.answer;
+      parseFormAnswer(jsonData.data, answer);
+
+      return jsonData?.data;
+    } else {
       return null;
     }
-    
   };
 
   const getDisclosureReport = async () => {
@@ -157,7 +155,7 @@ export const DisclosurePage = () => {
     const jsonData = await response.json();
     if (jsonData.success) {
       //window.location.reload();
-      console.log('jsonData.data ', jsonData.data);
+      console.log('jsonData.data disclosure ', jsonData.data);
       setDataDisclosures(jsonData.data);
 
       let req = [];
@@ -215,12 +213,11 @@ export const DisclosurePage = () => {
     const jsonData = await rawResponse.json();
     if (jsonData.success) {
       message.success('Insert Sukses');
-     const res= await getDisclosureReport();
-    const dtForm= await getDataByIndexForm(res);
-    console.log('formmmdttttt',dtForm);
-    // return;
-    onSave(dtForm,null,null);
-   
+      const res = await getDisclosureReport();
+      const dtForm = await getDataByIndexForm(res);
+      console.log('formmmdttttt', dtForm);
+      // return;
+      onSave(dtForm, null, null);
     } else {
       message.error('Insert Failed');
     }
@@ -228,7 +225,6 @@ export const DisclosurePage = () => {
 
   useEffect(() => {
     if (dataSourceTree) {
-      
       console.log('useeffect 3');
       let type = new Set();
       for (let i = 0; i < dataSourceTree.data.length; i++) {
@@ -279,7 +275,6 @@ export const DisclosurePage = () => {
 
   useEffect(() => {
     if (reportId && topicId) {
-      
       console.log('useeffect 1');
       getDisclosureReport();
     }
@@ -324,8 +319,9 @@ export const DisclosurePage = () => {
   };
 
   const onConfirmDiscDelete = async (dt: any) => {
-    console.log(dt);
-    //return;
+    console.log('deletedisclosure', dt);
+    onDeleteFormAnswer(dt);
+    return;
     const url = `/api/report/new-report/disclosures/delete?id=${dt._id}`;
     const rawResponse = await fetch(url);
     const jsonData = await rawResponse.json();
@@ -333,6 +329,21 @@ export const DisclosurePage = () => {
       message.success('Delete Sukses');
       getDisclosureReport();
     }
+  };
+
+  const onDeleteFormAnswer = async (dt: any) => {
+    // per 1 disclosure delete nya
+    const dtSend = [
+      {
+        type: dt.type.toLowerCase(),
+        lang: 'en',
+        code: dt.code,
+        delete:true,
+        topicId:topicId
+      },
+    ];
+    const res = await getDataByIndexForm(dtSend);
+    
   };
 
   const items: TabsProps['items'] = [
@@ -477,42 +488,38 @@ export const DisclosurePage = () => {
     },
   ];
 
-  const onSave= async (dataform:any,answer:any,content:any)=>{
-   
-        let objc:any={
-          
-        }
-        if(dataform){
-          objc['form']=dataform;
-        }
-        if(answer){
-          objc['answer']=answer;
-        }
-        if(content){
-          objc['content']=content;
-        }
-          const res = await fetch(`/api/report/new-report/topic/${topicId}`, {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(objc),
-          });
-          const result = await res.json();
-          if (result['success']) {
-            message.success('Save Success');
-          } else {
-            message.error('Save Failed');
-          }
-        
-  }
+  const onSave = async (dataform: any, answer: any, content: any) => {
+    let objc: any = {};
+    if (dataform) {
+      objc['form'] = dataform;
+    }
+    if (answer) {
+      objc['answer'] = answer;
+    }
+    if (content) {
+      objc['content'] = content;
+    }
+    const res = await fetch(`/api/report/new-report/topic/${topicId}`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(objc),
+    });
+    const result = await res.json();
+    if (result['success']) {
+      message.success('Save Success');
+    } else {
+      message.error('Save Failed');
+    }
+  };
 
   const operations = (
     <Button
       type="primary"
       onClick={async () => {
         const content = editor?.getHTML();
-        onSave(dataForm,answer,content);
+        onSave(dataForm, answer, content);
       }}
     >
       Save
@@ -598,6 +605,5 @@ export const DisclosurePage = () => {
     }
 
     inserttDisclosureReport(id, name, code, type, rname, lang);
-    
   }
 };
