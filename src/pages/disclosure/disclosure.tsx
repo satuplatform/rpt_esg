@@ -94,7 +94,7 @@ export const DisclosurePage = () => {
         // console.log('answerrrrparse',answer, answer[item.id],item.id);
         return {
           ...item,
-          value: answer?.[item.id] !== undefined ? answer[item.id] : '',
+          value: answer?.[item.id]['value'] !== undefined ? answer[item.id]['value'] : '',
         };
       });
     // }
@@ -144,8 +144,11 @@ export const DisclosurePage = () => {
         const answer=dataSourceTopic?.data[0]?.answer;
         parseFormAnswer(jsonData.data,answer);
       
-    
+        return jsonData?.data;
+    }else{
+      return null;
     }
+    
   };
 
   const getDisclosureReport = async () => {
@@ -213,7 +216,11 @@ export const DisclosurePage = () => {
     if (jsonData.success) {
       message.success('Insert Sukses');
      const res= await getDisclosureReport();
-     getDataByIndexForm(res);
+    const dtForm= await getDataByIndexForm(res);
+    console.log('formmmdttttt',dtForm);
+    // return;
+    onSave(dtForm,null,null);
+   
     } else {
       message.error('Insert Failed');
     }
@@ -470,23 +477,26 @@ export const DisclosurePage = () => {
     },
   ];
 
-  const operations = (
-    <Button
-      type="primary"
-      onClick={async () => {
-        const content = editor?.getHTML();
-
-        if (content) {
+  const onSave= async (dataform:any,answer:any,content:any)=>{
+   
+        let objc:any={
+          
+        }
+        if(dataform){
+          objc['form']=dataform;
+        }
+        if(answer){
+          objc['answer']=answer;
+        }
+        if(content){
+          objc['content']=content;
+        }
           const res = await fetch(`/api/report/new-report/topic/${topicId}`, {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
             },
-            body: JSON.stringify({
-              content: content,
-              form: dataForm,
-              answer: answer,
-            }),
+            body: JSON.stringify(objc),
           });
           const result = await res.json();
           if (result['success']) {
@@ -494,7 +504,15 @@ export const DisclosurePage = () => {
           } else {
             message.error('Save Failed');
           }
-        }
+        
+  }
+
+  const operations = (
+    <Button
+      type="primary"
+      onClick={async () => {
+        const content = editor?.getHTML();
+        onSave(dataForm,answer,content);
       }}
     >
       Save
@@ -580,5 +598,6 @@ export const DisclosurePage = () => {
     }
 
     inserttDisclosureReport(id, name, code, type, rname, lang);
+    
   }
 };
